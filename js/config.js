@@ -38,17 +38,11 @@ window.SHOP = {
   maxKort: 42,   // cm, A2
   maxLang: 59.4, // cm, A2
   minZijde: 9,
-  formaten: [
-    { label: "13 × 18 cm", b: 13, h: 18 },
-    { label: "A5 – 14,8 × 21 cm", b: 14.8, h: 21 },
-    { label: "20 × 30 cm", b: 20, h: 30 },
-    { label: "A4 – 21 × 29,7 cm", b: 21, h: 29.7 },
-    { label: "30 × 30 cm", b: 30, h: 30 },
-    { label: "30 × 40 cm", b: 30, h: 40 },
-    { label: "A3 – 29,7 × 42 cm", b: 29.7, h: 42 },
-    { label: "40 × 50 cm", b: 40, h: 50 },
-    { label: "A2 – 42 × 59,4 cm", b: 42, h: 59.4 },
-  ],
+  // Formaten op breedte. De hoogte volgt uit de verhouding van de foto.
+  formaten: [10, 15, 20, 30],
+  standaardBreedte: 15,
+  // Verhouding hoogte/breedte als de foto (nog) niet gelezen kan worden: 3:2 liggend.
+  standaardVerhouding: 2 / 3,
 
   // Postcodes binnen ongeveer 16 km van de Watersportbaan (Gent).
   postcodes: {

@@ -60,7 +60,7 @@
           </div>
           <p class="hint" id="zone"></p>
           <label for="opmerking">Opmerking (niet verplicht)</label>
-          <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur, of: graag één print zonder rand"></textarea>
+          <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur"></textarea>
         </div>
       </section>
 
@@ -110,24 +110,13 @@
       <label>Dikte</label>
       <div class="keuzes gsm"></div>
 
-      <label>Formaat</label>
-      <select class="formaat"></select>
-      <div class="rij eigen verborgen">
-        <div><label>Breedte (cm)</label><input type="number" class="b" min="9" max="59.4" step="0.1" inputmode="decimal"></div>
-        <div><label>Hoogte (cm)</label><input type="number" class="h" min="9" max="59.4" step="0.1" inputmode="decimal"></div>
-      </div>
+      <label>Breedte</label>
+      <div class="keuzes formaat"></div>
+      <p class="hint maat-uitleg"></p>
       <p class="hint maat-fout fout"></p>
 
-      <div class="rij">
-        <div>
-          <label>Afwerking</label>
-          <select class="rand">
-            <option value="vol">Volledig vullen (kan iets bijsnijden)</option>
-            <option value="rand">Volledig beeld met witte rand</option>
-          </select>
-        </div>
-        <div><label>Aantal</label><input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
-      </div>
+      <label>Aantal</label>
+      <input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric" style="max-width:8rem">
       <p class="print-prijs"></p>
     </div>
   </template>

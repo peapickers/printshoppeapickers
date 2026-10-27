@@ -9,7 +9,7 @@
 
   // ---------- Prints ----------
   function nieuwePrint() {
-    const p = { uid: ++teller, papier: "mat", gsm: 310, formaat: 3, b: 21, h: 29.7, rand: "vol", aantal: 1, file: null, px: null };
+    const p = { uid: ++teller, papier: "mat", gsm: 310, b: S.standaardBreedte, h: 0, rand: "vol", aantal: 1, file: null, px: null };
     prints.push(p);
     const el = $("#print-tpl").content.firstElementChild.cloneNode(true);
     el.dataset.uid = p.uid;
@@ -32,20 +32,11 @@
     tekenGsm(p);
 
     // Formaat
-    const sel = $(".formaat", el);
-    S.formaten.forEach((f, i) => sel.insertAdjacentHTML("beforeend", `<option value="${i}">${f.label}</option>`));
-    sel.insertAdjacentHTML("beforeend", `<option value="-1">Eigen maat…</option>`);
-    sel.value = p.formaat;
-    sel.addEventListener("change", () => {
-      p.formaat = Number(sel.value);
-      $(".eigen", el).classList.toggle("verborgen", p.formaat !== -1);
-      if (p.formaat >= 0) { p.b = S.formaten[p.formaat].b; p.h = S.formaten[p.formaat].h; }
-      else { $(".b", el).value = p.b; $(".h", el).value = p.h; }
-      bijwerken();
-    });
-    $(".b", el).addEventListener("input", (e) => { p.b = parseFloat(e.target.value) || 0; bijwerken(); });
-    $(".h", el).addEventListener("input", (e) => { p.h = parseFloat(e.target.value) || 0; bijwerken(); });
-    $(".rand", el).addEventListener("change", (e) => { p.rand = e.target.value; bijwerken(); });
+    // Formaat: enkel de breedte; de hoogte volgt uit de foto.
+    const formaatBox = $(".formaat", el);
+    formaatBox.innerHTML = S.formaten.map((b) =>
+      `<label><input type="radio" name="formaat-${p.uid}" value="${b}"${b === p.b ? " checked" : ""}><span>${b} cm${b === S.standaardBreedte ? " (standaard)" : ""}</span></label>`).join("");
+    formaatBox.addEventListener("change", (e) => { p.b = Number(e.target.value); bijwerken(); });
     $(".aantal", el).addEventListener("input", (e) => { p.aantal = Math.max(1, parseInt(e.target.value) || 1); bijwerken(); });
     $(".weg", el).addEventListener("click", () => {
       prints.splice(prints.indexOf(p), 1);
@@ -110,9 +101,7 @@
     const afwijking = Math.abs(1 - verhoudingBeeld / verhoudingPrint);
     let extra = "";
     if (afwijking > 0.03) {
-      extra = p.rand === "vol"
-        ? ` Let op: je foto heeft een andere vorm dan dit formaat, dus er valt ongeveer ${Math.round(afwijking * 100)}% van een rand weg. Kies "witte rand" als alles zichtbaar moet blijven.`
-        : " Je foto heeft een andere vorm dan het papier, dus de witte rand is niet overal even breed.";
+      extra = ` Let op: je foto heeft een andere vorm dan dit formaat, dus er valt ongeveer ${Math.round(afwijking * 100)}% van een rand weg.`;
     }
     const klein = Math.max(w, h) <= 2048 ? " Is dit misschien een verkleinde foto uit WhatsApp of Messenger? Stuur dan liever het origineel." : "";
     if (dpi >= 240) return { klasse: "goed", tekst: `Scherp genoeg (${dpi} ppi op dit formaat, ${w}×${h} pixels).${extra}` };
@@ -200,6 +189,12 @@
   // ---------- Bijwerken ----------
   function bijwerken() {
     prints.forEach((p, i) => {
+      // Hoogte volgt uit de verhouding van de foto, afgerond op een halve cm.
+      const verhouding = p.px ? p.px.h / p.px.w : S.standaardVerhouding;
+      p.h = Math.round(p.b * verhouding * 2) / 2;
+      $(".maat-uitleg", p.el).textContent = p.px
+        ? `Je print wordt ${Shop.fmtCm(p.b)} × ${Shop.fmtCm(p.h)} cm. De hoogte volgt uit je foto.`
+        : `De hoogte volgt uit je foto. Bij een gewone liggende foto wordt dat ${Shop.fmtCm(p.b)} × ${Shop.fmtCm(p.h)} cm.`;
       $(".titel", p.el).textContent = `Print ${i + 1}`;
       $(".weg", p.el).classList.toggle("verborgen", prints.length === 1);
       const maatOk = Shop.zijdenOk(p.b, p.h);
