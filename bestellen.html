@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bestellen · Fine Art Printshop</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="kop"></header>
+  <main class="wrap">
+    <div id="formulier">
+      <section class="held">
+        <p class="eyebrow">Bestelling plaatsen</p>
+        <h1>Wat mag ik voor je printen?</h1>
+        <p>Je betaalt online niets. Je krijgt op het einde een QR-code met je bestelling en het bedrag, en je betaalt aan de deur.</p>
+      </section>
+
+      <section>
+        <h2>1. Je prints</h2>
+        <p class="hint">Twijfel je over je bestand? Lees eerst <a href="uploadgids.html">Bestanden klaarmaken</a>. Het duurt 2 minuten.</p>
+        <div id="prints"></div>
+        <p><button type="button" class="knop licht" id="extra">+ Nog een print toevoegen</button></p>
+      </section>
+
+      <section>
+        <h2>2. Wanneer ben je thuis?</h2>
+        <p class="hint">Kies in de kalender een dag en een uur waarop je thuis bent. Ik heb minstens 3 dagen nodig om te printen en te laten drogen.
+          Je betaalt bij de levering, dus iemand moet thuis zijn.</p>
+        <div class="kaart">
+          <div class="kal-kop">
+            <button type="button" class="kal-nav" id="kal-vorige" aria-label="Vorige maand">‹</button>
+            <strong id="kal-maand"></strong>
+            <button type="button" class="kal-nav" id="kal-volgende" aria-label="Volgende maand">›</button>
+          </div>
+          <div class="kal" id="kal" role="grid"></div>
+          <div id="kal-uren" class="verborgen">
+            <label id="kal-uren-titel"></label>
+            <div class="keuzes" id="tijdvakken"></div>
+          </div>
+          <p class="hint" id="kal-status"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>3. Je gegevens</h2>
+        <div class="kaart">
+          <div class="rij">
+            <div><label for="naam">Naam</label><input id="naam" autocomplete="name" required></div>
+            <div><label for="tel">Gsm-nummer</label><input id="tel" type="tel" autocomplete="tel" required>
+              <p class="hint">Zodat ik je kan bellen als ik voor de deur sta.</p></div>
+          </div>
+          <label for="email">E-mailadres</label>
+          <input id="email" type="email" autocomplete="email" required>
+          <label for="adres">Straat en huisnummer</label>
+          <input id="adres" autocomplete="street-address" required>
+          <div class="rij">
+            <div><label for="postcode">Postcode</label><input id="postcode" inputmode="numeric" maxlength="4" autocomplete="postal-code" required></div>
+            <div><label for="gemeente">Gemeente</label><input id="gemeente" autocomplete="address-level2" required></div>
+          </div>
+          <p class="hint" id="zone"></p>
+          <label for="opmerking">Opmerking (niet verplicht)</label>
+          <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur, of: graag één print zonder rand"></textarea>
+        </div>
+      </section>
+
+      <div class="overzicht" aria-live="polite">
+        <div><span id="ov-tekst">Nog geen prints</span><br><strong id="ov-totaal">€ 0,00</strong> <span class="klein" style="color:inherit">te betalen aan de deur</span></div>
+        <button type="button" class="knop" id="plaats">Bestelling plaatsen</button>
+      </div>
+      <p class="fout" id="fouten" role="alert"></p>
+    </div>
+
+    <div id="resultaat" class="verborgen">
+      <section class="held">
+        <p class="eyebrow">Bijna klaar</p>
+        <h1 id="res-titel">Je bestelling</h1>
+        <p id="res-uitleg"></p>
+      </section>
+      <div id="res-stappen"></div>
+      <section class="kaart">
+        <div class="bon-kop">
+          <div>
+            <p class="eyebrow">Bestelnummer <span id="res-id"></span></p>
+            <p class="te-betalen" id="res-totaal"></p>
+            <p id="res-datum"></p>
+            <p><a id="res-bon" href="#">Bekijk je bestelbon</a></p>
+          </div>
+          <div><div class="qr" id="res-qr"></div><p class="klein" style="text-align:center">Toon deze QR-code bij de levering</p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer id="voet"></footer>
+
+  <template id="print-tpl">
+    <div class="kaart print">
+      <button type="button" class="weg">Verwijder ✕</button>
+      <h3 class="titel">Print</h3>
+      <div class="drop" tabindex="0" role="button">
+        <strong>Sleep je foto hierheen of tik om te kiezen</strong>
+        <span class="klein">JPG, PNG, TIFF of PDF</span>
+        <input type="file" class="bestand verborgen" accept="image/*,.tif,.tiff,.pdf">
+        <div class="voorbeeld"></div>
+      </div>
+      <div class="meter verborgen"></div>
+
+      <label>Papier</label>
+      <div class="keuzes papier"></div>
+      <label>Dikte</label>
+      <div class="keuzes gsm"></div>
+
+      <label>Formaat</label>
+      <select class="formaat"></select>
+      <div class="rij eigen verborgen">
+        <div><label>Breedte (cm)</label><input type="number" class="b" min="9" max="59.4" step="0.1" inputmode="decimal"></div>
+        <div><label>Hoogte (cm)</label><input type="number" class="h" min="9" max="59.4" step="0.1" inputmode="decimal"></div>
+      </div>
+      <p class="hint maat-fout fout"></p>
+
+      <div class="rij">
+        <div>
+          <label>Afwerking</label>
+          <select class="rand">
+            <option value="vol">Volledig vullen (kan iets bijsnijden)</option>
+            <option value="rand">Volledig beeld met witte rand</option>
+          </select>
+        </div>
+        <div><label>Aantal</label><input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
+      </div>
+      <p class="print-prijs"></p>
+    </div>
+  </template>
+
+  <script src="js/vendor/qrcode.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/bestellen.js"></script>
+</body>
+</html>

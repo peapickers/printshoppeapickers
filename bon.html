@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Bestelbon · Fine Art Printshop</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="kop"></header>
+  <main class="wrap">
+    <section id="leeg" class="held verborgen">
+      <h1>Geen bestelbon gevonden</h1>
+      <p>Deze link is onvolledig. Scan de QR-code opnieuw of open de link uit je bevestigingsmail.</p>
+    </section>
+
+    <section id="bon" class="verborgen">
+      <div class="kaart">
+        <div class="bon-kop">
+          <div>
+            <p class="eyebrow">Bestelbon <span id="id"></span></p>
+            <h1 style="font-size:1.6rem">Te betalen aan de deur</h1>
+            <p class="te-betalen" id="totaal"></p>
+            <p id="levering"></p>
+          </div>
+          <div class="qr" id="qr"></div>
+        </div>
+
+        <h2 style="margin-top:1.5rem">Bestelling</h2>
+        <div class="tabel-scroll">
+          <table>
+            <thead><tr><th>Print</th><th>Aantal</th><th class="bedrag">Per stuk</th><th class="bedrag">Totaal</th></tr></thead>
+            <tbody id="regels"></tbody>
+            <tfoot>
+              <tr><td colspan="3">Levering</td><td class="bedrag" id="leverkost"></td></tr>
+              <tr><td colspan="3">Totaal te betalen</td><td class="bedrag" id="totaal2"></td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <h2 style="margin-top:1.5rem">Leveradres</h2>
+        <p id="klant"></p>
+        <p id="opmerking" class="klein"></p>
+        <p class="klein" id="betaal"></p>
+        <p class="niet-printen">
+          <a class="knop licht" id="bel" href="#">Bellen</a>
+          <a class="knop licht" id="kaart" href="#" target="_blank" rel="noopener">Route</a>
+          <button type="button" class="knop licht" onclick="print()">Afdrukken</button>
+        </p>
+      </div>
+    </section>
+  </main>
+  <footer id="voet"></footer>
+  <script src="js/vendor/qrcode.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      const S = window.SHOP, $ = (s) => document.querySelector(s);
+      let order;
+      try { order = Shop.decodeer(location.hash.slice(1)); } catch (e) { order = null; }
+      if (!order) { $("#leeg").classList.remove("verborgen"); return; }
+
+      // Bedragen worden altijd opnieuw berekend uit de prijslijst, niet uit de link.
+      const t = Shop.totalen(order.items);
+      const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      $("#id").textContent = order.id;
+      $("#totaal").textContent = Shop.euro(t.totaal);
+      $("#totaal2").textContent = Shop.euro(t.totaal);
+      $("#leverkost").textContent = Shop.euro(t.levering);
+      $("#levering").textContent = `Levering op ${Shop.datumLang(order.datum)}, tussen ${order.tijdvak}`;
+      $("#regels").innerHTML = order.items.map((i) => `
+        <tr><td>${esc(Shop.itemOmschrijving(i))}${i.bestand ? `<br><span class="klein">${esc(i.bestand)}</span>` : ""}</td>
+        <td>${i.aantal}</td><td class="bedrag">${Shop.euro(Shop.prijsPerStuk(i))}</td>
+        <td class="bedrag">${Shop.euro(Shop.prijsPerStuk(i) * i.aantal)}</td></tr>`).join("");
+      $("#klant").innerHTML = `${esc(order.naam)}<br>${esc(order.adres)}<br>${esc(order.postcode)} ${esc(order.gemeente)}<br>${esc(order.tel)} · ${esc(order.email)}`;
+      if (order.opmerking) $("#opmerking").textContent = `Opmerking: ${order.opmerking}`;
+      $("#betaal").textContent = `Betalen kan met ${S.betaalwijzen}.`;
+      $("#bel").href = `tel:${order.tel.replace(/\s/g, "")}`;
+      $("#kaart").href = `https://www.openstreetmap.org/search?query=${encodeURIComponent(`${order.adres}, ${order.postcode} ${order.gemeente}`)}`;
+      Shop.tekenQr($("#qr"), location.href);
+      $("#bon").classList.remove("verborgen");
+    })();
+  </script>
+</body>
+</html>
