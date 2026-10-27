@@ -32,7 +32,6 @@ window.SHOP = {
   minimumPerPrint: 6,
   papier: {
     mat:   { label: "Mat",         gewichten: { 180: 1.2, 310: 1.8 } },
-    semi:  { label: "Semi-glossy", gewichten: { 180: 1.2, 310: 1.8 } },
     satin: { label: "Satin",       gewichten: { 180: 1.3, 310: 1.9 } },
     baryta:{ label: "Baryta",      gewichten: { 350: 2.6 } },
   },
