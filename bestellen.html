@@ -115,8 +115,16 @@
       <p class="hint maat-uitleg"></p>
       <p class="hint maat-fout fout"></p>
 
-      <label>Aantal</label>
-      <input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric" style="max-width:8rem">
+      <div class="rij">
+        <div>
+          <label>Afwerking</label>
+          <select class="rand">
+            <option value="vol">Volledig vullen</option>
+            <option value="rand">Volledig beeld met witte rand</option>
+          </select>
+        </div>
+        <div><label>Aantal</label><input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
+      </div>
       <p class="print-prijs"></p>
     </div>
   </template>

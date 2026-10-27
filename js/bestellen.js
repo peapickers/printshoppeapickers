@@ -37,6 +37,7 @@
     formaatBox.innerHTML = S.formaten.map((b) =>
       `<label><input type="radio" name="formaat-${p.uid}" value="${b}"${b === p.b ? " checked" : ""}><span>${b} cm${b === S.standaardBreedte ? " (standaard)" : ""}</span></label>`).join("");
     formaatBox.addEventListener("change", (e) => { p.b = Number(e.target.value); bijwerken(); });
+    $(".rand", el).addEventListener("change", (e) => { p.rand = e.target.value; bijwerken(); });
     $(".aantal", el).addEventListener("input", (e) => { p.aantal = Math.max(1, parseInt(e.target.value) || 1); bijwerken(); });
     $(".weg", el).addEventListener("click", () => {
       prints.splice(prints.indexOf(p), 1);
