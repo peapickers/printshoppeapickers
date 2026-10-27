@@ -1,6 +1,6 @@
 // Alles wat Jonas zelf wil aanpassen staat in dit bestand.
 window.SHOP = {
-  naam: "Fine Art Printshop",
+  naam: "Peapicker's Printshop",
   email: "printshoppeapickers@proton.me",
 
   // Link naar de postershop van vzw peapickers (adres nog te bevestigen).
