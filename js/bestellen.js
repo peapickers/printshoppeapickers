@@ -267,15 +267,16 @@
     ].filter((r, i, a) => r !== "" || a[i - 1] !== "").join("\n");
   }
 
-  async function meldJonas(order, url) {
+  // Het ntfy-onderwerp staat leesbaar in de broncode van de site, dus iedereen
+  // kan meelezen. Daarom gaat er geen naam, adres, bedrag of bonlink mee:
+  // alleen het bestelnummer. De details komen via de mail van de klant.
+  async function meldJonas(order) {
     if (!S.ntfyTopic) return;
-    const t = Shop.totalen(order.items);
-    const n = order.items.reduce((s, i) => s + i.aantal, 0);
     try {
       await fetch(`https://ntfy.sh/${encodeURIComponent(S.ntfyTopic)}`, {
         method: "POST",
-        body: `${order.naam}, ${n} prints, ${Shop.euro(t.totaal)}. Levering ${Shop.datumLang(order.datum)} ${order.tijdvak}.`,
-        headers: { Title: `Nieuwe bestelling ${order.id}`, Tags: "printer,moneybag", Priority: "high", Click: url },
+        body: `Bestelnummer ${order.id}. De details komen via mail.`,
+        headers: { Title: "Nieuwe bestelling", Tags: "printer", Priority: "high", Click: "https://mail.proton.me" },
       });
     } catch (e) { /* melding is een extraatje; de bestelling gaat ook via mail */ }
   }
@@ -290,7 +291,7 @@
     const knop = $("#plaats");
     knop.disabled = true;
 
-    meldJonas(order, url);
+    meldJonas(order);
     toonResultaat(order, url);
   });
 

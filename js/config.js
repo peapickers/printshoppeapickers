@@ -7,7 +7,8 @@ window.SHOP = {
   peapickersUrl: "https://peapickers.github.io/peapickers-postershop/",
 
   // Pushmelding naar je gsm via de gratis app ntfy (https://ntfy.sh).
-  // Abonneer je in de app op dit woord en hou het geheim. Leeg = geen melding.
+  // Abonneer je in de app op dit woord. Het staat leesbaar in de site, dus de
+  // melding bevat bewust alleen het bestelnummer. Leeg = geen melding.
   ntfyTopic: "printshop-lp6kbdq0lpaaz0vk",
 
   // Link waarlangs klanten hun bestanden uploaden (bestandsaanvraag van je

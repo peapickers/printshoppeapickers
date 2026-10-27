@@ -7,7 +7,7 @@ QR-code met de bestelbon. Er wordt betaald aan de deur.
 ## Hoe een bestelling bij je binnenkomt
 
 1. De klant drukt op **Bestelling plaatsen**.
-2. Je gsm krijgt meteen een **pushmelding** via ntfy, met naam, aantal prints, bedrag en levermoment. Tik erop om de bestelbon te openen.
+2. Je gsm krijgt meteen een **pushmelding** via ntfy met het bestelnummer. Naam, adres en bedrag zitten er bewust niet in (zie hieronder).
 3. De klant tikt op **Mail mijn bestelling**. Er komt een ingevulde mail van de klant naar `printshoppeapickers@proton.me`.
 4. Proton stuurt automatisch je **bevestiging** terug.
 5. De klant uploadt de foto's via de **uploadlink** (versleutelde bestandsaanvraag).
@@ -19,7 +19,7 @@ QR-code met de bestelbon. Er wordt betaald aan de deur.
 - Installeer de app **ntfy** (Android: Play Store of F-Droid, iPhone: App Store).
 - Tik op **+** en abonneer je op het onderwerp dat in `js/config.js` staat bij `ntfyTopic`.
 - Zet de meldingen van die app op "hoge prioriteit", zodat ze ook in stille modus binnenkomen.
-- Hou het woord geheim. Wie het kent, kan je meldingen sturen. Gebeurt dat toch, kies dan een nieuw woord in `config.js`.
+- Het woord staat leesbaar in de broncode van de site, dus iedereen kan het vinden. Daarom bevat de melding alleen het bestelnummer en nooit klantgegevens. De details lees je in je Proton-mail. Krijg je valse meldingen, kies dan een nieuw woord in `config.js`.
 
 ### 2. Automatische bevestiging (Proton Mail Plus)
 Ga in Proton Mail naar **Instellingen → Alle instellingen → Automatisch antwoord**. Zet het aan op **Permanent** en plak deze tekst:
