@@ -13,16 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TZ: Europe/Brussels
+      # Zonder agendalink (geheim AGENDA_ICS_URL) worden de stappen overgeslagen,
+      # zodat je geen foutmails krijgt.
+      HEEFT_AGENDA: ${{ secrets.AGENDA_ICS_URL != '' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - if: env.HEEFT_AGENDA != 'true'
+        run: echo "Nog geen agendalink ingesteld; niets te doen."
+      - if: env.HEEFT_AGENDA == 'true'
+        uses: actions/checkout@v4
+      - if: env.HEEFT_AGENDA == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --prefix scripts --no-audit --no-fund
-      - run: node scripts/beschikbaarheid.mjs
+      - if: env.HEEFT_AGENDA == 'true'
+        run: npm install --prefix scripts --no-audit --no-fund
+      - if: env.HEEFT_AGENDA == 'true'
+        run: node scripts/beschikbaarheid.mjs
         env:
           AGENDA_ICS_URL: ${{ secrets.AGENDA_ICS_URL }}
-      - name: Wijziging bewaren
+      - if: env.HEEFT_AGENDA == 'true'
+        name: Wijziging bewaren
         run: |
           git config user.name "leverkalender"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
