@@ -105,9 +105,15 @@
       extra = ` Let op: je foto heeft een andere vorm dan dit formaat, dus er valt ongeveer ${Math.round(afwijking * 100)}% van een rand weg.`;
     }
     const klein = Math.max(w, h) <= 2048 ? " Is dit misschien een verkleinde foto uit WhatsApp of Messenger? Stuur dan liever het origineel." : "";
-    if (dpi >= 240) return { klasse: "goed", tekst: `Scherp genoeg (${dpi} ppi op dit formaat, ${w}×${h} pixels).${extra}` };
-    if (dpi >= 150) return { klasse: "matig", tekst: `Bruikbaar, maar van dichtbij iets minder scherp (${dpi} ppi). Een kleiner formaat wordt scherper.${klein}${extra}` };
-    return { klasse: "slecht", tekst: `Te weinig pixels voor dit formaat (${dpi} ppi). De print wordt wazig. Kies een kleiner formaat of stuur een groter bestand.${klein}${extra}` };
+    // Kijkafstand: minstens 30 cm, of de diagonaal van de print als die groter is.
+    // Het oog onderscheidt ongeveer 1 boogminuut, dus nodig ≈ 3438 / afstand in inch.
+    const afstand = Math.max(30, Math.hypot(p.b, p.h));
+    const scherp = Math.min(300, Math.round(3438 / (afstand / 2.54)));
+    const minimum = Math.round(scherp * 0.6);
+    const cm = Math.round(afstand);
+    if (dpi >= scherp) return { klasse: "goed", tekst: `Scherp genoeg om te bekijken van op ${cm} cm, de normale kijkafstand voor dit formaat (${dpi} ppi, ${w}×${h} pixels).${extra}` };
+    if (dpi >= minimum) return { klasse: "matig", tekst: `Bruikbaar, maar van op ${cm} cm iets minder scherp (${dpi} ppi, ideaal is ${scherp}). Een kleiner formaat wordt scherper.${klein}${extra}` };
+    return { klasse: "slecht", tekst: `Te weinig pixels voor dit formaat (${dpi} ppi, minimum ${minimum}). De print wordt wazig. Kies een kleiner formaat of stuur een groter bestand.${klein}${extra}` };
   }
 
   // ---------- Leverkalender ----------
