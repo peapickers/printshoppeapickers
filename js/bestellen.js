@@ -113,7 +113,7 @@
     const cm = Math.round(afstand);
     if (dpi >= scherp) return { klasse: "goed", tekst: `Scherp genoeg om te bekijken van op ${cm} cm, de normale kijkafstand voor dit formaat (${dpi} ppi, ${w}×${h} pixels).${extra}` };
     if (dpi >= minimum) return { klasse: "matig", tekst: `Bruikbaar, maar van op ${cm} cm iets minder scherp (${dpi} ppi, ideaal is ${scherp}). Een kleiner formaat wordt scherper.${klein}${extra}` };
-    return { klasse: "slecht", tekst: `Te weinig pixels voor dit formaat (${dpi} ppi, minimum ${minimum}). De print wordt wazig. Kies een kleiner formaat of stuur een groter bestand.${klein}${extra}` };
+    return { klasse: "slecht", tekst: `Te weinig pixels voor dit formaat (${dpi} ppi, minimum ${minimum}). De print wordt wazig. Kies een kleiner formaat of stuur een groter bestand. Stoort het je niet? Dan kan je gewoon bestellen.${klein}${extra}` };
   }
 
   // ---------- Leverkalender ----------
