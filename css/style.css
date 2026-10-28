@@ -149,7 +149,8 @@ td, th { border-bottom-color: rgba(17, 17, 17, .15); }
 .print .rij { grid-template-columns: minmax(0, 1fr) 7rem; }
 .held-cta { margin: 1.6rem 0 0; text-align: center; }
 .knop.groot { display: grid; place-items: center; width: min(100%, 720px); margin: 0 auto; min-height: clamp(130px, 25vw, 240px); font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; letter-spacing: .02em; }
-.held-cta .gidslink { display: inline-block; margin-top: 1rem; font-size: 1.1rem; }
+.held-cta .gidslink { margin: 1rem 0 0; font-size: 1.1rem; max-width: none; color: var(--inkt); }
+.knop.klein-knop { padding: .35rem .7rem; letter-spacing: .04em; margin-left: .3rem; }
 .info { position: relative; display: inline-block; }
 .info-knop { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; }
 .info-tekst { display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: max-content; max-width: 220px; background: var(--inkt); color: var(--papier); padding: .5rem .7rem; font-size: .9rem; line-height: 1.4; z-index: 5; }
