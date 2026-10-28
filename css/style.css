@@ -147,3 +147,6 @@ tfoot td { border: 0; font-weight: 700; }
 .tip { border: 1px dashed var(--inkt); border-left: 4px solid var(--inkt); }
 td, th { border-bottom-color: rgba(17, 17, 17, .15); }
 .print .rij { grid-template-columns: minmax(0, 1fr) 7rem; }
+.held-cta { margin: 1.6rem 0 0; text-align: center; }
+.knop.groot { display: grid; place-items: center; width: 100%; min-height: clamp(180px, 34vw, 320px); font-size: clamp(1.6rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: .02em; }
+.held-cta .gidslink { display: inline-block; margin-top: 1rem; font-size: 1.1rem; }
