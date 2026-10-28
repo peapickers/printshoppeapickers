@@ -5,6 +5,8 @@ window.SHOP = {
 
   // Link naar de postershop van vzw peapickers.
   peapickersUrl: "https://peapickers.github.io/postershoppeapickers/",
+  // Landingspagina van vzw peapickers met alle merken.
+  vzwUrl: "https://peapickers.github.io/printshoppeapickers/vzw/",
 
   // Pushmelding naar je gsm via de gratis app ntfy (https://ntfy.sh).
   // Abonneer je in de app op dit woord. Het staat leesbaar in de site, dus de

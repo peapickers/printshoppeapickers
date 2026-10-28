@@ -155,3 +155,48 @@ td, th { border-bottom-color: rgba(17, 17, 17, .15); }
 .info-knop { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; }
 .info-tekst { display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: max-content; max-width: 220px; background: var(--inkt); color: var(--papier); padding: .5rem .7rem; font-size: .9rem; line-height: 1.4; z-index: 5; }
 .info:hover .info-tekst, .info:focus-within .info-tekst, .info.open .info-tekst { display: block; }
+
+/* Bestellen: één vraag per scherm */
+.wizard { max-width: 640px; margin: 1.5rem auto 0; }
+.voortgang { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.voortgang i { height: 4px; background: rgba(17, 17, 17, .15); }
+.voortgang i.af { background: var(--inkt); }
+.stapnaam { font-size: .85rem; color: var(--zacht); margin: .5rem 0 0; }
+.stap { display: grid; gap: 18px; margin: 1.2rem 0 2rem; }
+.stap[hidden], .hulp[hidden] { display: none; }
+.stap h1 { font-size: clamp(1.5rem, 4.5vw, 2.1rem); margin: 0; }
+.stap .drop { min-height: 190px; display: grid; place-content: center; gap: .3rem; }
+.foto { display: flex; gap: 14px; align-items: center; }
+.foto-beeld img { width: 92px; max-height: 140px; object-fit: contain; border: 1px solid var(--inkt); display: block; }
+.lampje { display: inline-flex; align-items: center; gap: .45rem; font-weight: 700; color: var(--zacht); }
+.lampje::before { content: ""; width: .8rem; height: .8rem; border-radius: 50%; background: currentColor; }
+.lampje:empty { display: none; }
+.lampje.goed { color: var(--goed); } .lampje.matig { color: var(--matig); } .lampje.slecht { color: var(--slecht); }
+.veld { display: grid; gap: 6px; }
+.veld label, .veld-titel { font-weight: 700; margin: 0; }
+.veld .hint { margin: 0; }
+.veld.mist input { outline: 2px solid var(--slecht); outline-offset: 1px; }
+.melding { color: var(--slecht); font-size: .9rem; margin: 0; }
+.keuze-knop { font: inherit; border: 1px solid var(--lijn); background: var(--papier); color: var(--inkt); padding: .5rem .85rem; cursor: pointer; }
+.keuze-knop.gekozen { background: var(--inkt); color: var(--papier); }
+#kalender { margin-top: 8px; }
+details.meer summary { cursor: pointer; color: var(--zacht); text-decoration: underline; text-underline-offset: 3px; }
+details.meer[open] { display: grid; gap: 14px; }
+.acties { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid rgba(17, 17, 17, .15); padding-top: 16px; }
+.link { background: none; border: 0; padding: 0; font: inherit; color: var(--zacht); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.onzichtbaar { visibility: hidden; }
+.prijs { font-weight: 700; }
+.hulp { border: 1px solid var(--inkt); border-left-width: 4px; padding: 12px 14px; }
+.hulp p { margin: 0; }
+.hulp p + p { margin-top: .6rem; }
+.hulp-plek { display: grid; gap: 8px; }
+.hulp-vraag { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid rgba(17, 17, 17, .15); padding: 10px 14px; }
+.printlijst { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.printlijst li { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border: 1px solid rgba(17, 17, 17, .15); padding: 8px 10px; font-size: .92rem; }
+.printlijst li.actief { border-color: var(--inkt); }
+.printlijst li > span:first-child { min-width: 0; }
+
+/* Link naar vzw peapickers naast de naam */
+.logo-groep { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; }
+.vzw-link { font-size: .9rem; color: var(--zacht); }
+@media (max-width: 440px) { .acties { flex-wrap: nowrap; } .acties .prijs .klein { display: none; } }

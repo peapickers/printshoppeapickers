@@ -11,68 +11,90 @@
 <body>
   <header id="kop"></header>
   <main class="wrap">
-    <div id="formulier">
-      <section class="held">
-        <p class="eyebrow">Bestelling plaatsen</p>
-        <h1>Wat mag ik voor je printen?</h1>
-        <p>Je betaalt online niets. Je krijgt op het einde een QR-code met je bestelling en het bedrag, en je betaalt aan de deur.</p>
-      </section>
+    <div id="formulier" class="wizard">
+      <div class="voortgang" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <p class="stapnaam" id="stapnaam">Stap 1 van 4</p>
 
-      <section>
-        <h2>1. Je prints</h2>
-        <p class="hint">Twijfel je over je bestand? Lees eerst <a href="uploadgids.html">Bestanden klaarmaken</a>. Het duurt 2 minuten.</p>
-        <div id="prints"></div>
-        <p><button type="button" class="knop licht" id="extra">+ Nog een print toevoegen</button></p>
-      </section>
-
-      <section>
-        <h2>2. Wanneer ben je thuis?</h2>
-        <p class="hint">Kies in de kalender een dag en een uur waarop je thuis bent. Ik heb minstens 3 dagen nodig om te printen en te laten drogen.
-          Je betaalt bij de levering, dus iemand moet thuis zijn.</p>
-        <div class="kaart">
-          <div class="kal-kop">
-            <button type="button" class="kal-nav" id="kal-vorige" aria-label="Vorige maand">‹</button>
-            <strong id="kal-maand"></strong>
-            <button type="button" class="kal-nav" id="kal-volgende" aria-label="Volgende maand">›</button>
-          </div>
-          <div class="kal" id="kal" role="grid"></div>
-          <div id="kal-uren" class="verborgen">
-            <label id="kal-uren-titel"></label>
-            <div class="keuzes" id="tijdvakken"></div>
-          </div>
-          <p class="hint" id="kal-status"></p>
+      <section class="stap" data-stap="1">
+        <h1>Welke foto wil je laten printen?</h1>
+        <div class="drop" id="drop" tabindex="0" role="button">
+          <strong>Tik hier of sleep je foto</strong>
+          <span class="klein">Rechtstreeks van je telefoon of computer</span>
+          <input type="file" id="bestand" class="verborgen" accept="image/*,.tif,.tiff,.pdf">
         </div>
-      </section>
-
-      <section>
-        <h2>3. Je gegevens</h2>
-        <div class="kaart">
-          <div class="rij">
-            <div><label for="naam">Naam</label><input id="naam" autocomplete="name" required></div>
-            <div><label for="tel">Gsm-nummer</label><input id="tel" type="tel" autocomplete="tel" required>
-              <p class="hint">Ik stuur je een bericht 30 minuten voor de levering. Je hoeft niet te antwoorden.</p></div>
+        <div class="foto verborgen" id="foto">
+          <div class="foto-beeld" id="foto-beeld"></div>
+          <div>
+            <strong id="foto-naam"></strong> <span class="klein" id="foto-px"></span><br>
+            <span class="lampje" id="lampje-1"></span><br>
+            <button type="button" class="link" id="andere">Andere foto kiezen</button>
           </div>
-          <label for="email">E-mailadres</label>
-          <input id="email" type="email" autocomplete="email" required>
-          <label for="adres">Straat en huisnummer</label>
-          <input id="adres" autocomplete="street-address" required>
-          <div class="rij">
-            <div><label for="postcode">Postcode</label><input id="postcode" inputmode="numeric" maxlength="4" autocomplete="postal-code" required></div>
-            <div><label for="gemeente">Gemeente</label><input id="gemeente" autocomplete="address-level2" required></div>
-          </div>
-          <p class="hint" id="zone"></p>
-          <label for="opmerking">Opmerking (niet verplicht)</label>
-          <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur"></textarea>
         </div>
+        <div id="tip-1"></div>
+        <div class="hulp-plek" data-hulp="1"></div>
+        <div class="acties"><button type="button" class="link" data-terug>Terug</button><button type="button" class="knop" data-verder>Verder</button></div>
       </section>
 
-      <div class="overzicht" aria-live="polite">
-        <div><span id="ov-tekst">Nog geen prints</span><br><strong id="ov-totaal">€ 0,00</strong> <span class="klein" style="color:inherit">te betalen aan de deur</span></div>
-        <button type="button" class="knop" id="plaats">Bestelling plaatsen</button>
-      </div>
-      <p class="fout" id="fouten" role="alert"></p>
+      <section class="stap" data-stap="2" hidden>
+        <h1>Welke papiersoort en grootte?</h1>
+        <div class="veld"><span class="veld-titel">Papier</span><div class="keuzes" id="papier"></div></div>
+        <div class="veld"><span class="veld-titel">Breedte</span><div class="keuzes" id="formaat"></div>
+          <p class="hint" id="maat"></p>
+          <p class="hint"><span class="lampje" id="lampje-2"></span></p></div>
+        <div id="tip-2"></div>
+        <details class="meer">
+          <summary>Meer opties</summary>
+          <div class="veld"><span class="veld-titel">Dikte</span><div class="keuzes" id="gsm"></div></div>
+          <div class="veld"><span class="veld-titel">Afwerking</span><div class="keuzes" id="rand">
+            <label><input type="radio" name="rand" value="vol" checked><span>Volledig vullen</span></label>
+            <label><input type="radio" name="rand" value="rand"><span>Witte rand</span></label></div></div>
+          <div class="veld"><label for="aantal">Aantal</label><input type="number" id="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
+        </details>
+        <div id="lijst"></div>
+        <p><button type="button" class="link" id="extra">+ Nog een foto toevoegen</button></p>
+        <div class="hulp-plek" data-hulp="2"></div>
+        <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-2"></span><button type="button" class="knop" data-verder>Verder</button></div>
+      </section>
+
+      <section class="stap" data-stap="3" hidden>
+        <h1>Wanneer ben je thuis?</h1>
+        <div class="veld" id="veld-dag"><span class="veld-titel">Dag</span>
+          <div class="keuzes" id="dagen"></div>
+          <div class="kaart verborgen" id="kalender">
+            <div class="kal-kop">
+              <button type="button" class="kal-nav" id="kal-vorige" aria-label="Vorige maand">‹</button>
+              <strong id="kal-maand"></strong>
+              <button type="button" class="kal-nav" id="kal-volgende" aria-label="Volgende maand">›</button>
+            </div>
+            <div class="kal" id="kal" role="grid"></div>
+          </div>
+          <p class="melding verborgen">Kies nog een dag.</p></div>
+        <div class="veld verborgen" id="veld-uur"><span class="veld-titel" id="uur-titel">Uur</span>
+          <div class="keuzes" id="tijdvakken"></div>
+          <p class="melding verborgen">Kies nog een uur.</p></div>
+        <p class="hint" id="kal-status"></p>
+        <div class="hulp-plek" data-hulp="3"></div>
+        <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-3"></span><button type="button" class="knop" data-verder>Verder</button></div>
+      </section>
+
+      <section class="stap" data-stap="4" hidden>
+        <h1>Waar mag ik leveren?</h1>
+        <div class="rij">
+          <div class="veld"><label for="naam">Naam</label><input id="naam" autocomplete="name"><p class="melding verborgen">Vul je naam in.</p></div>
+          <div class="veld"><label for="tel">Gsm</label><input id="tel" type="tel" autocomplete="tel"><p class="melding verborgen">Ik stuur je een bericht 30 minuten voor ik kom. Vul je gsm-nummer in.</p></div>
+        </div>
+        <div class="veld"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email"><p class="melding verborgen">Vul je e-mailadres in.</p></div>
+        <div class="veld"><label for="adres">Straat en nummer</label><input id="adres" autocomplete="street-address"><p class="melding verborgen">Vul je adres in.</p></div>
+        <div class="rij">
+          <div class="veld"><label for="postcode">Postcode</label><input id="postcode" inputmode="numeric" maxlength="4" autocomplete="postal-code"><p class="melding verborgen">Vul je postcode in.</p></div>
+          <div class="veld"><label for="gemeente">Gemeente</label><input id="gemeente" autocomplete="address-level2"><p class="melding verborgen">Vul je gemeente in.</p></div>
+        </div>
+        <details class="meer"><summary>Opmerking toevoegen</summary>
+          <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur"></textarea></details>
+        <div class="hulp-plek" data-hulp="4"></div>
+        <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-4"></span><button type="button" class="knop" data-verder>Bestelling plaatsen</button></div>
+      </section>
     </div>
-
     <div id="resultaat" class="verborgen">
       <section class="held">
         <p class="eyebrow">Bijna klaar</p>
@@ -95,41 +117,6 @@
   </main>
   <footer id="voet"></footer>
 
-  <template id="print-tpl">
-    <div class="kaart print">
-      <button type="button" class="weg">Verwijder ✕</button>
-      <h3 class="titel">Print</h3>
-      <div class="drop" tabindex="0" role="button">
-        <strong>Sleep je foto hierheen of tik om te kiezen</strong>
-        <span class="klein">JPG, PNG, TIFF of PDF</span>
-        <input type="file" class="bestand verborgen" accept="image/*,.tif,.tiff,.pdf">
-        <div class="voorbeeld"></div>
-      </div>
-      <div class="meter verborgen"></div>
-
-      <label>Papier</label>
-      <div class="keuzes papier"></div>
-      <label>Dikte</label>
-      <div class="keuzes gsm"></div>
-
-      <label>Breedte</label>
-      <div class="keuzes formaat"></div>
-      <p class="hint maat-uitleg"></p>
-      <p class="hint maat-fout fout"></p>
-
-      <div class="rij">
-        <div>
-          <label>Afwerking</label>
-          <select class="rand">
-            <option value="vol">Volledig vullen</option>
-            <option value="rand">Volledig beeld met witte rand</option>
-          </select>
-        </div>
-        <div><label>Aantal</label><input type="number" class="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
-      </div>
-      <p class="print-prijs"></p>
-    </div>
-  </template>
 
   <script src="js/vendor/qrcode.js"></script>
   <script src="js/config.js"></script>

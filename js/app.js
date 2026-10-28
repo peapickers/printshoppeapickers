@@ -119,7 +119,8 @@
     const kop = document.getElementById("kop");
     if (kop) {
       kop.innerHTML = `
-        <a class="logo" href="index.html">${S.naam}</a>
+        <span class="logo-groep"><a class="logo" href="index.html">${S.naam}</a>
+          <a class="vzw-link" href="${S.vzwUrl}">← vzw peapickers</a></span>
         <nav>
           ${link("index.html", "Home")}
           ${link("uploadgids.html", "Bestanden klaarmaken")}
