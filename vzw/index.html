@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vzw peapickers</title>
+  <meta name="description" content="Alle merken van vzw peapickers op één plek.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Zelfde stijl als de printshop en de postershop */
+      --papier: #F7F7F6;
+      --inkt: #111111;
+      --zacht: #444444;
+      --letter: "Courier Prime", "Courier New", Courier, monospace;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--papier); color: var(--inkt); font-family: var(--letter); line-height: 1.5; }
+    main { max-width: 560px; margin: 0 auto; padding: 56px 16px 40px; }
+    h1 { font-size: clamp(1.8rem, 7vw, 2.6rem); letter-spacing: .08em; text-align: center; margin: 0 0 2.2rem;
+      padding-bottom: 1.2rem; border-bottom: 1px solid var(--inkt); }
+    .merken { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+    .merk { display: block; border: 1px solid var(--inkt); padding: 18px 20px; color: var(--inkt); text-decoration: none; }
+    a.merk:hover, a.merk:focus-visible { background: var(--inkt); color: var(--papier); outline: none; }
+    .merk small { display: block; font-size: .85rem; }
+    .merk strong { display: block; font-size: 1.6rem; line-height: 1.2; }
+    .merk.later { border-style: dashed; color: var(--zacht); }
+    .merk.later small::after { content: " · binnenkort"; }
+    footer { text-align: center; font-size: .85rem; color: var(--zacht); margin-top: 2.5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>VZW PEAPICKERS</h1>
+    <ul class="merken">
+      <li><a class="merk" href="https://peapickers.github.io/printshoppeapickers/"><small>peapicker's</small><strong>Printshop</strong></a></li>
+      <li><a class="merk" href="https://peapickers.github.io/postershoppeapickers/"><small>peapicker's</small><strong>Postershop</strong></a></li>
+      <li><div class="merk later"><small>peapicker's</small><strong>Archive</strong></div></li>
+      <li><div class="merk later"><small>peapicker's</small><strong>Fiscaliteit</strong></div></li>
+    </ul>
+    <footer>vzw peapickers · Gent</footer>
+  </main>
+</body>
+</html>
