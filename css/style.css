@@ -150,3 +150,7 @@ td, th { border-bottom-color: rgba(17, 17, 17, .15); }
 .held-cta { margin: 1.6rem 0 0; text-align: center; }
 .knop.groot { display: grid; place-items: center; width: 100%; min-height: clamp(180px, 34vw, 320px); font-size: clamp(1.6rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: .02em; }
 .held-cta .gidslink { display: inline-block; margin-top: 1rem; font-size: 1.1rem; }
+.info { position: relative; display: inline-block; }
+.info-knop { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; }
+.info-tekst { display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: max-content; max-width: 220px; background: var(--inkt); color: var(--papier); padding: .5rem .7rem; font-size: .9rem; line-height: 1.4; z-index: 5; }
+.info:hover .info-tekst, .info:focus-within .info-tekst, .info.open .info-tekst { display: block; }
