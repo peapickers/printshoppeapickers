@@ -115,6 +115,11 @@
   });
   input.addEventListener("change", () => { if (input.files[0]) kiesBestand(huidig, input.files[0]); input.value = ""; });
   $("#andere").addEventListener("click", () => input.click());
+  $("#verwijder-foto").addEventListener("click", () => {
+    if (huidig.url) URL.revokeObjectURL(huidig.url);
+    Object.assign(huidig, { file: null, px: null, url: "" });
+    tekenStap1();
+  });
 
   function kiesBestand(p, file) {
     p.file = file;
