@@ -19,7 +19,7 @@
   };
 
   // ---------- Stappen ----------
-  function gaNaar(n) {
+  function gaNaar(n, scrollen = true) {
     stap = n;
     $$(".stap").forEach((el) => (el.hidden = Number(el.dataset.stap) !== n));
     $$(".voortgang i").forEach((i, k) => i.classList.toggle("af", k < n));
@@ -27,7 +27,7 @@
     if (n === 1) tekenStap1();
     if (n === 2) tekenStap2();
     bijwerkenPrijs();
-    window.scrollTo(0, 0);
+    if (scrollen) $("#formulier").scrollIntoView({ block: "start" });
   }
 
   function openUitleg(n, open) {
@@ -459,6 +459,6 @@
   }
 
   nieuwePrint();
-  gaNaar(1);
+  gaNaar(1, false);
   laadBeschikbaarheid();
 })();
