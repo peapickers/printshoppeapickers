@@ -66,7 +66,7 @@
       v: 1, id: order.id, dt: order.datum, tv: order.tijdvak, n: order.naam,
       a: order.adres, pc: order.postcode, g: order.gemeente, t: order.tel, e: order.email,
       o: order.opmerking || "",
-      i: order.items.map((i) => [i.papier, i.gsm, i.b, i.h, i.aantal, i.rand, i.bestand || ""]),
+      i: order.items.map((i) => [i.papier, i.gsm, i.b, i.h, i.aantal, i.rand, i.bestand || "", i.randCm || 0]),
     };
     const bytes = new TextEncoder().encode(JSON.stringify(compact));
     let bin = "";
@@ -81,7 +81,7 @@
     return {
       id: c.id, datum: c.dt, tijdvak: c.tv, naam: c.n, adres: c.a, postcode: c.pc,
       gemeente: c.g, tel: c.t, email: c.e, opmerking: c.o,
-      items: c.i.map(([papier, gsm, b, h, aantal, rand, bestand]) => ({ papier, gsm, b, h, aantal, rand, bestand })),
+      items: c.i.map(([papier, gsm, b, h, aantal, rand, bestand, randCm]) => ({ papier, gsm, b, h, aantal, rand, bestand, randCm })),
     };
   }
 
@@ -99,7 +99,7 @@
 
   function itemOmschrijving(i) {
     const p = S.papier[i.papier];
-    const rand = i.rand === "rand" ? ", met witte rand" : "";
+    const rand = i.rand === "rand" ? `, met witte rand${i.randCm ? ` van ${fmtCm(i.randCm)} cm` : ""}` : "";
     return `${p ? p.label : i.papier} ${i.gsm} g/m², ${fmtCm(i.b)} × ${fmtCm(i.h)} cm${rand}`;
   }
   const fmtCm = (n) => String(n).replace(".", ",");

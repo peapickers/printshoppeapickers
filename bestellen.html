@@ -47,7 +47,13 @@
           <div class="veld"><span class="veld-titel">Dikte</span><div class="keuzes" id="gsm"></div></div>
           <div class="veld"><span class="veld-titel">Afwerking</span><div class="keuzes" id="rand">
             <label><input type="radio" name="rand" value="vol" checked><span>Volledig vullen</span></label>
-            <label><input type="radio" name="rand" value="rand"><span>Witte rand</span></label></div></div>
+            <label><input type="radio" name="rand" value="rand"><span>Witte rand</span></label></div>
+            <div class="rand-keuze verborgen" id="rand-keuze">
+              <label for="rand-cm">Breedte van de rand: <span id="rand-cm-tekst">1 cm</span></label>
+              <input type="range" id="rand-cm" min="0.5" max="5" step="0.5" value="1">
+              <div class="rand-voorbeeld" id="rand-voorbeeld"><div class="rand-beeld"></div></div>
+              <p class="hint">Een voorbeeld van je print. Je hoeft zelf geen rand toe te voegen aan je foto.</p>
+            </div></div>
           <div class="veld"><label for="aantal">Aantal</label><input type="number" id="aantal" min="1" max="50" value="1" inputmode="numeric"></div>
         </details>
         <div id="lijst"></div>

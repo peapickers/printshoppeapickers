@@ -209,3 +209,8 @@ details.meer[open] { display: grid; gap: 14px; }
 .info-onder .info-tekst { bottom: auto; top: calc(100% + 6px); max-width: min(360px, 85vw); }
 .info-onder .info-tekst ol { margin: 0; padding-left: 1.2rem; }
 .info-onder .info-tekst strong { color: inherit; }
+.rand-keuze { display: grid; gap: 8px; margin-top: 8px; }
+.rand-keuze label { font-weight: 400; }
+.rand-keuze input[type="range"] { padding: 0; border: 0; accent-color: var(--inkt); }
+.rand-voorbeeld { width: min(220px, 60%); max-width: 100%; background: #fff; border: 1px solid var(--inkt); box-sizing: border-box; }
+.rand-beeld { width: 100%; height: 100%; background: #9aa6a0 center / cover no-repeat; }

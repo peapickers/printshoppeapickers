@@ -98,7 +98,7 @@
 
   // ---------- Prints ----------
   function nieuwePrint() {
-    const p = { papier: "mat", gsm: 310, b: S.standaardBreedte, h: 0, rand: "vol", aantal: 1, file: null, px: null, url: "" };
+    const p = { papier: "mat", gsm: 310, b: S.standaardBreedte, h: 0, rand: "vol", randCm: 1, aantal: 1, file: null, px: null, url: "" };
     prints.push(p);
     huidig = p;
     return p;
@@ -148,10 +148,12 @@
     if (!p.file) return null;
     if (!p.px) return { niveau: "onbekend" };
     const { w, h } = p.px;
-    const ppi = w / (p.b / 2.54);
+    // Met een witte rand wordt de foto zelf smaller gedrukt.
+    const beeldB = p.rand === "rand" ? Math.max(1, p.b - 2 * p.randCm) : p.b;
+    const ppi = w / (beeldB / 2.54);
     return {
       niveau: ppi >= PPI_SCHERP ? "goed" : ppi >= PPI_DUIDELIJK ? "matig" : "slecht",
-      duidelijkVanaf: Math.floor((w / PPI_DUIDELIJK) * 2.54 * 2) / 2,
+      duidelijkVanaf: Math.floor((w / PPI_DUIDELIJK) * 2.54 * 2) / 2 + (p.b - beeldB),
       chat: Math.max(w, h) <= 2048,
     };
   }
@@ -206,6 +208,7 @@
     radios($("#gsm"), "gsm", Object.keys(S.papier[p.papier].gewichten).map((g) => [g, `${g} g/m²`]), p.gsm);
     radios($("#formaat"), "formaat", S.formaten.map((b) => [b, `${b} cm`]), p.b);
     $$('#rand input').forEach((i) => (i.checked = i.value === p.rand));
+    $("#rand-cm").value = p.randCm;
     $("#aantal").value = p.aantal;
     bijwerkenPrint();
     tekenLijst();
@@ -216,6 +219,7 @@
     const verhouding = p.px ? p.px.h / p.px.w : S.standaardVerhouding;
     p.h = Math.round(p.b * verhouding * 2) / 2;
     $("#maat").textContent = `Je print wordt ${Shop.fmtCm(p.b)} × ${Shop.fmtCm(p.h)} cm.`;
+    tekenRand(p);
     const k = kwaliteit(p);
     tekenLampje($("#lampje-2"), k);
     toonTip(2, tipTekst(p, k));
@@ -231,7 +235,23 @@
   });
   $("#gsm").addEventListener("change", (e) => { huidig.gsm = Number(e.target.value); bijwerkenPrint(); tekenLijst(); });
   $("#formaat").addEventListener("change", (e) => { huidig.b = Number(e.target.value); bijwerkenPrint(); tekenLijst(); });
-  $("#rand").addEventListener("change", (e) => { huidig.rand = e.target.value; bijwerkenPrint(); tekenLijst(); });
+  $("#rand").addEventListener("change", (e) => {
+    if (e.target.name !== "rand") return;
+    huidig.rand = e.target.value; bijwerkenPrint(); tekenLijst();
+  });
+  $("#rand-cm").addEventListener("input", (e) => { huidig.randCm = Number(e.target.value); bijwerkenPrint(); tekenLijst(); });
+
+  // Voorbeeld van de witte rand op schaal: papier b × h met de foto erin.
+  function tekenRand(p) {
+    const metRand = p.rand === "rand";
+    $("#rand-keuze").classList.toggle("verborgen", !metRand);
+    if (!metRand) return;
+    $("#rand-cm-tekst").textContent = `${Shop.fmtCm(p.randCm)} cm`;
+    const vb = $("#rand-voorbeeld");
+    vb.style.aspectRatio = `${p.b} / ${p.h}`;
+    vb.style.padding = `${(p.randCm / p.b) * 100}%`;
+    $(".rand-beeld", vb).style.backgroundImage = p.url ? `url("${p.url}")` : "";
+  }
   $("#aantal").addEventListener("input", (e) => { huidig.aantal = Math.max(1, parseInt(e.target.value) || 1); bijwerkenPrint(); tekenLijst(); });
   $("#extra").addEventListener("click", () => { nieuwePrint(); gaNaar(1); });
 
@@ -385,7 +405,7 @@
       naam: $("#naam").value.trim(), tel: $("#tel").value.trim(), email: $("#email").value.trim(),
       adres: $("#adres").value.trim(), postcode: $("#postcode").value.trim(), gemeente: $("#gemeente").value.trim(),
       opmerking: $("#opmerking").value.trim(),
-      items: prints.map((p) => ({ papier: p.papier, gsm: p.gsm, b: p.b, h: p.h, aantal: p.aantal, rand: p.rand, bestand: p.file ? p.file.name : "" })),
+      items: prints.map((p) => ({ papier: p.papier, gsm: p.gsm, b: p.b, h: p.h, aantal: p.aantal, rand: p.rand, randCm: p.rand === "rand" ? p.randCm : 0, bestand: p.file ? p.file.name : "" })),
     };
   }
 
