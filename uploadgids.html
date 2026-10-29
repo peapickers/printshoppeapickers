@@ -30,23 +30,35 @@
     <section>
       <h2>Waar vind ik het origineel?</h2>
       <div class="kaart">
-        <h3>iPhone</h3>
-        <ol>
-          <li>Open de bestelpagina in Safari op je iPhone.</li>
-          <li>Tik op het vak "Sleep je foto hierheen" en kies <strong>Fotobibliotheek</strong>.</li>
-          <li>Kies je foto. Vraagt je iPhone naar een grootte, kies dan <strong>Werkelijke grootte</strong>.</li>
-        </ol>
-        <h3>Android</h3>
-        <ol>
-          <li>Open de bestelpagina in Chrome op je telefoon.</li>
-          <li>Tik op het vak en kies <strong>Galerij</strong> of <strong>Foto's</strong>.</li>
-          <li>Staat je foto alleen in de cloud (Google Foto's)? Download hem dan eerst: open de foto, tik op ⋮ en kies <strong>Downloaden</strong>.</li>
-        </ol>
-        <h3>Computer</h3>
-        <ol>
-          <li>Zoek de foto in de map waar je camera of telefoon de foto's bewaart (vaak "Afbeeldingen" of "DCIM").</li>
-          <li>Sleep het bestand rechtstreeks in het vak op de bestelpagina.</li>
-        </ol>
+        <div class="info info-onder">
+          <h3><button type="button" class="info-knop" onclick="this.closest('.info').classList.toggle('open')">Computer</button></h3>
+          <div class="info-tekst" role="tooltip">
+          <ol>
+            <li>Zoek de foto in de map waar je camera of telefoon de foto's bewaart (vaak "Afbeeldingen" of "DCIM").</li>
+            <li>Sleep het bestand rechtstreeks in het vak op de bestelpagina.</li>
+          </ol>
+          </div>
+        </div>
+        <div class="info info-onder">
+          <h3><button type="button" class="info-knop" onclick="this.closest('.info').classList.toggle('open')">Android</button></h3>
+          <div class="info-tekst" role="tooltip">
+          <ol>
+            <li>Open de bestelpagina in Chrome op je telefoon.</li>
+            <li>Tik op het vak en kies <strong>Galerij</strong> of <strong>Foto's</strong>.</li>
+            <li>Staat je foto alleen in de cloud (Google Foto's)? Download hem dan eerst: open de foto, tik op ⋮ en kies <strong>Downloaden</strong>.</li>
+          </ol>
+          </div>
+        </div>
+        <div class="info info-onder">
+          <h3><button type="button" class="info-knop" onclick="this.closest('.info').classList.toggle('open')">iPhone</button></h3>
+          <div class="info-tekst" role="tooltip">
+          <ol>
+            <li>Open de bestelpagina in Safari op je iPhone.</li>
+            <li>Tik op het vak "Tik hier of sleep je foto" en kies <strong>Fotobibliotheek</strong>.</li>
+            <li>Kies je foto. Vraagt je iPhone naar een grootte, kies dan <strong>Werkelijke grootte</strong>.</li>
+          </ol>
+          </div>
+        </div>
         <h3>Heb je geen kwalitatief digitaal bestand?</h3>
         <p>Kreeg je de foto van iemand anders, vraag dan het origineel te mailen of via <a href="https://www.swisstransfer.com" target="_blank" rel="noopener">SwissTransfer</a> te sturen, niet via WhatsApp.
           Lukt dat niet en stoort het je niet dat de print minder scherp wordt? Stuur het bestand dan gewoon door, ook met een rode code. Elk bestand kan gedrukt worden!</p>
