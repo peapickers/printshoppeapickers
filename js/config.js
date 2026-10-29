@@ -29,13 +29,18 @@ window.SHOP = {
   leveruren: { van: "10:00", tot: "21:00" },
   slotMinuten: 60,
 
-  // VOORBEELDPRIJZEN: startprijs per print + prijs per 100 cm² papier.
-  startprijs: 4,
-  minimumPerPrint: 6,
+  // Prijs = 3 × M. M is de materiaalkost van één print: papier en inkt,
+  // plus 20% voor misdrukken en fouten. Zelfde redenering als de 7M van de
+  // postershop, maar zonder auteursrechten of voorschotten.
+  prijsFactor: 3,
+  misdrukMarge: 0.2,
+  // VOORBEELDBEDRAGEN: materiaalkost (papier + inkt) zonder marge.
+  // Vast per print (bv. beschermhoes) en per 100 cm² papier per papiersoort en dikte.
+  materiaalVast: 0.3,
   papier: {
-    mat:   { label: "Mat",         gewichten: { 180: 1.2, 310: 1.8 } },
-    satin: { label: "Satin",       gewichten: { 180: 1.3, 310: 1.9 } },
-    baryta:{ label: "Baryta",      gewichten: { 350: 2.6 } },
+    mat:   { label: "Mat",         gewichten: { 180: 0.25, 310: 0.35 } },
+    satin: { label: "Satin",       gewichten: { 180: 0.28, 310: 0.38 } },
+    baryta:{ label: "Baryta",      gewichten: { 350: 0.6 } },
   },
   maxKort: 42,   // cm, A2
   maxLang: 59.4, // cm, A2

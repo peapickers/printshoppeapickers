@@ -11,15 +11,32 @@
 <body>
   <header id="kop"></header>
   <main class="wrap">
-    <section>
-      <h2>Prijs per print</h2>
-      <div class="prijsblokken" id="prijstabel"></div>
-      <p class="klein" id="prijs-noot"></p>
+    <section class="prijs-tekst">
+      <h2>De prijs</h2>
+      <p>We meten de materiaalkost <strong>M</strong> van één print: papier en inkt, plus 20% voor misdrukken en fouten.
+        De prijs is altijd 3 × M. Werkuren tellen niet mee.</p>
+      <p>Je laat je eigen beeld drukken, dus er zijn geen auteursrechten of voorschotten. Daarom volstaat 3M, waar
+        <a href="https://peapickers.github.io/postershoppeapickers/about.html">Peapicker's Posters</a> met 7M werkt.</p>
+
+      <figure class="prijs-schema" aria-label="Prijsopbouw: 3 delen van de materiaalkost M">
+        <div class="ps-balk">
+          <div class="ps-deel ps-materiaal" style="--n:1"><span class="ps-m">1M</span><span class="ps-naam">Materiaal</span><span class="ps-bedrag" data-m="1"></span></div>
+          <div class="ps-deel ps-peapickers" style="--n:2"><span class="ps-m">2M</span><span class="ps-naam">vzw peapickers</span><span class="ps-bedrag" data-m="2"></span></div>
+        </div>
+        <div class="ps-details">
+          <div class="ps-detail" style="--n:1" data-label="1M · Materiaal"><p>Papier en inkt, plus 20% voor misdrukken en fouten.</p></div>
+          <div class="ps-detail" style="--n:2" data-label="2M · vzw peapickers"><p>Ondersteunt vzw peapickers en het uitwerken van culturele projecten in de vorm van productcreatie.</p></div>
+        </div>
+        <figcaption class="ps-totaal"><span><strong>3M</strong> = prijs</span><strong data-m="3"></strong><span class="klein" id="ps-voorbeeld"></span></figcaption>
+      </figure>
+      <p>Alle opbrengsten gaan naar vzw peapickers. Levering kost ${LEVER} per bestelling, hoeveel prints je ook bestelt.
+        Elke prijs wordt naar boven afgerond op 50 cent. Een witte rand of volledig vullen kost hetzelfde.</p>
     </section>
 
     <section>
-      <h2>Zo komt de prijs tot stand</h2>
-      <ul id="opbouw"></ul>
+      <h2>Prijs per print</h2>
+      <div class="prijsblokken" id="prijstabel"></div>
+      <p class="klein">Prijzen voor een gewone staande of liggende foto (verhouding 2:3). Heeft je foto een andere vorm, dan zie je de exacte prijs tijdens het bestellen.</p>
     </section>
 
     <p class="held-cta"><a class="knop" href="bestellen.html">Bestelling plaatsen</a></p>
@@ -28,10 +45,21 @@
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // Alles wordt berekend uit js/config.js, dus nieuwe prijzen verschijnen hier vanzelf.
+    // Alles wordt berekend uit js/config.js, dus nieuwe bedragen verschijnen hier vanzelf.
     (function () {
       const S = SHOP;
       const hoogte = (b) => Math.round(b * 1.5 * 2) / 2;
+
+      // Rekenvoorbeeld: 15 cm breed op het eerste papier.
+      const [papier, p] = Object.entries(S.papier)[0];
+      const gsm = Number(Object.keys(p.gewichten).pop());
+      const vb = { papier, gsm, b: S.standaardBreedte, h: hoogte(S.standaardBreedte) };
+      const M = Shop.materiaalkost(vb);
+      document.querySelectorAll("[data-m]").forEach((el) => (el.textContent = Shop.euro(M * Number(el.dataset.m))));
+      document.getElementById("ps-voorbeeld").textContent =
+        `Rekenvoorbeeld ${p.label} ${gsm} g/m², ${Shop.fmtCm(vb.b)} × ${Shop.fmtCm(vb.h)} cm, M = ${Shop.euro(M)}`;
+      document.querySelectorAll(".prijs-tekst p").forEach((el) => (el.innerHTML = el.innerHTML.replace("${LEVER}", Shop.euro(S.leverkost))));
+
       // Eén tabel per papiersoort: rijen zijn de breedtes, kolommen de diktes.
       document.getElementById("prijstabel").innerHTML = Object.entries(S.papier).map(([key, p]) => {
         const gewichten = Object.keys(p.gewichten).map(Number);
@@ -40,15 +68,6 @@
           <tbody>${S.formaten.map((b) => `<tr><td>${b} × ${Shop.fmtCm(hoogte(b))} cm</td>${gewichten.map((g) =>
             `<td class="bedrag">${Shop.euro(Shop.prijsPerStuk({ papier: key, gsm: g, b, h: hoogte(b) }))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
       }).join("");
-      document.getElementById("prijs-noot").textContent =
-        "Prijzen voor een gewone staande of liggende foto (verhouding 2:3). Heeft je foto een andere vorm, dan zie je de exacte prijs tijdens het bestellen.";
-      document.getElementById("opbouw").innerHTML = `
-        <li><strong>Vaste kost per print:</strong> ${Shop.euro(S.startprijs)} voor het klaarmaken, kalibreren en afwerken.</li>
-        <li><strong>Papier en inkt:</strong> een bedrag per 100 cm², afhankelijk van het papier. Hoe groter de print, hoe meer papier en inkt.</li>
-        <li><strong>Minimum:</strong> een print kost minstens ${Shop.euro(S.minimumPerPrint)}.</li>
-        <li><strong>Levering:</strong> ${Shop.euro(S.leverkost)} per bestelling, hoeveel prints je ook bestelt.</li>
-        <li><strong>Afronding:</strong> elke prijs wordt naar boven afgerond op 50 cent.</li>
-        <li>Een witte rand of volledig vullen kost hetzelfde.</li>`;
     })();
   </script>
 </body>

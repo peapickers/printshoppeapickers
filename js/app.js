@@ -5,13 +5,17 @@
   const euro = (n) =>
     new Intl.NumberFormat("nl-BE", { style: "currency", currency: "EUR" }).format(n);
 
-  // Prijs van één print, afgerond naar boven op 50 cent.
-  function prijsPerStuk(item) {
+  // M: materiaalkost van één print (papier en inkt), met 20% voor misdrukken.
+  function materiaalkost(item) {
     const p = S.papier[item.papier];
     const tarief = p && p.gewichten[item.gsm];
     if (!tarief) return NaN;
-    const ruw = S.startprijs + ((item.b * item.h) / 100) * tarief;
-    return Math.max(S.minimumPerPrint, Math.ceil(ruw * 2) / 2);
+    return (S.materiaalVast + ((item.b * item.h) / 100) * tarief) * (1 + S.misdrukMarge);
+  }
+
+  // Prijs van één print: 3 × M, afgerond naar boven op 50 cent.
+  function prijsPerStuk(item) {
+    return Math.ceil(S.prijsFactor * materiaalkost(item) * 2) / 2;
   }
 
   function totalen(items) {
@@ -146,7 +150,7 @@
   }
 
   window.Shop = {
-    euro, prijsPerStuk, totalen, leverslots, datumLang, zijdenOk,
+    euro, materiaalkost, prijsPerStuk, totalen, leverslots, datumLang, zijdenOk,
     codeer, decodeer, bonUrl, nieuwOrderId, itemOmschrijving, tekenQr, fmtCm,
   };
   document.addEventListener("DOMContentLoaded", kopEnVoet);
