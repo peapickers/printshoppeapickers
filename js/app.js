@@ -140,7 +140,7 @@
           </div>
           <a class="knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Naar de postershop ↗</a>
         </section>
-        <p class="klein">Levering binnen ±16 km rond de Watersportbaan in Gent · ${euro(S.leverkost)} per levering ·
+        <p class="klein">Levering (voorlopig) alleen in Gent en deelgemeenten · ${euro(S.leverkost)} per levering ·
         betalen aan de deur · <a href="mailto:${S.email}">${S.email}</a></p>`;
     }
   }

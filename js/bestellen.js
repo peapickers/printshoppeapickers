@@ -352,7 +352,7 @@
       return true;
     }
     markeer($("#postcode").closest(".veld"), true,
-      `Deze postcode ligt voorlopig buiten mijn leverzone (16 km rond Gent). Mail me even op <a href="mailto:${S.email}">${S.email}</a>, dan zoeken we samen een oplossing.`);
+      `Deze postcode ligt buiten mijn leverzone. Ik lever voorlopig alleen in Gent en deelgemeenten. Mail me even op <a href="mailto:${S.email}">${S.email}</a>, dan zoeken we samen een oplossing.`);
     return false;
   }
   $("#postcode").addEventListener("input", (e) => {

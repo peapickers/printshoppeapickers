@@ -46,15 +46,10 @@ window.SHOP = {
   // Verhouding hoogte/breedte als de foto (nog) niet gelezen kan worden: 3:2 liggend.
   standaardVerhouding: 2 / 3,
 
-  // Postcodes binnen ongeveer 16 km van de Watersportbaan (Gent).
+  // Voorlopig alleen Gent en deelgemeenten.
   postcodes: {
     "9000": "Gent", "9030": "Mariakerke", "9031": "Drongen", "9032": "Wondelgem",
     "9040": "Sint-Amandsberg", "9041": "Oostakker", "9042": "Desteldonk / Mendonk / Sint-Kruis-Winkel",
     "9050": "Gentbrugge / Ledeberg", "9051": "Sint-Denijs-Westrem / Afsnee", "9052": "Zwijnaarde",
-    "9070": "Destelbergen / Heusden", "9080": "Lochristi", "9090": "Melle / Gontrode",
-    "9230": "Wetteren", "9270": "Laarne / Kalken", "9800": "Deinze", "9810": "Nazareth / Eke",
-    "9820": "Merelbeke", "9830": "Sint-Martens-Latem", "9831": "Deurle", "9840": "De Pinte",
-    "9850": "Nevele / Landegem / Hansbeke", "9860": "Oosterzele", "9890": "Gavere",
-    "9920": "Lovendegem", "9930": "Zomergem", "9940": "Evergem / Sleidinge",
   },
 };
