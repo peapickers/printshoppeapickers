@@ -200,3 +200,6 @@ details.meer[open] { display: grid; gap: 14px; }
 .logo-groep { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; }
 .vzw-link { font-size: .9rem; color: var(--zacht); }
 @media (max-width: 440px) { .acties { flex-wrap: nowrap; } .acties .prijs .klein { display: none; } }
+.prijsblokken { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.prijsblokken h3 { margin: 0 0 .4rem; }
+.held-cta .gidslink + .gidslink { margin-top: .6rem; }

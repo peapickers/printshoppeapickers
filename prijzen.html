@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prijsopbouw · Peapicker's Printshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="kop"></header>
+  <main class="wrap">
+    <section class="held">
+      <h1>Prijsopbouw</h1>
+      <p>Wat je ziet, is wat je betaalt. Je betaalt pas aan de deur.</p>
+    </section>
+
+    <section>
+      <h2>Prijs per print</h2>
+      <div class="prijsblokken" id="prijstabel"></div>
+      <p class="klein" id="prijs-noot"></p>
+    </section>
+
+    <section>
+      <h2>Zo komt de prijs tot stand</h2>
+      <ul id="opbouw"></ul>
+    </section>
+
+    <p class="held-cta"><a class="knop" href="bestellen.html">Bestelling plaatsen</a></p>
+  </main>
+  <footer id="voet"></footer>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Alles wordt berekend uit js/config.js, dus nieuwe prijzen verschijnen hier vanzelf.
+    (function () {
+      const S = SHOP;
+      const hoogte = (b) => Math.round(b * 1.5 * 2) / 2;
+      // Eén tabel per papiersoort: rijen zijn de breedtes, kolommen de diktes.
+      document.getElementById("prijstabel").innerHTML = Object.entries(S.papier).map(([key, p]) => {
+        const gewichten = Object.keys(p.gewichten).map(Number);
+        return `<div class="kaart tabel-scroll"><h3>${p.label}</h3><table>
+          <thead><tr><th>Formaat</th>${gewichten.map((g) => `<th class="bedrag">${g} g/m²</th>`).join("")}</tr></thead>
+          <tbody>${S.formaten.map((b) => `<tr><td>${b} × ${Shop.fmtCm(hoogte(b))} cm</td>${gewichten.map((g) =>
+            `<td class="bedrag">${Shop.euro(Shop.prijsPerStuk({ papier: key, gsm: g, b, h: hoogte(b) }))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      }).join("");
+      document.getElementById("prijs-noot").textContent =
+        "Prijzen voor een gewone staande of liggende foto (verhouding 2:3). Heeft je foto een andere vorm, dan zie je de exacte prijs tijdens het bestellen.";
+      document.getElementById("opbouw").innerHTML = `
+        <li><strong>Vaste kost per print:</strong> ${Shop.euro(S.startprijs)} voor het klaarmaken, kalibreren en afwerken.</li>
+        <li><strong>Papier en inkt:</strong> een bedrag per 100 cm², afhankelijk van het papier. Hoe groter de print, hoe meer papier en inkt.</li>
+        <li><strong>Minimum:</strong> een print kost minstens ${Shop.euro(S.minimumPerPrint)}.</li>
+        <li><strong>Levering:</strong> ${Shop.euro(S.leverkost)} per bestelling, hoeveel prints je ook bestelt.</li>
+        <li><strong>Afronding:</strong> elke prijs wordt naar boven afgerond op 50 cent.</li>
+        <li>Een witte rand of volledig vullen kost hetzelfde.</li>`;
+    })();
+  </script>
+</body>
+</html>
