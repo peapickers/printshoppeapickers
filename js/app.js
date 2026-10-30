@@ -129,7 +129,7 @@
           ${link("index.html", "Home")}
           ${link("uploadgids.html", "Bestanden klaarmaken")}
           ${link("bestellen.html", "Bestellen")}
-          <a class="pp-knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Peapicker's Posters ↗</a>
+          <a class="pp-knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Peapickers Posters ↗</a>
         </nav>`;
     }
     const voet = document.getElementById("voet");

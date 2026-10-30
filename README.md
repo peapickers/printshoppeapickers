@@ -1,4 +1,4 @@
-# Peapicker's Printshop – webshop
+# Peapickers Printshop – webshop
 
 Een statische webshop: geen server, geen betaalprovider, geen kosten voor hosting.
 De klant stelt prints samen, kiest een levermoment in de kalender en krijgt een
