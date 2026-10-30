@@ -196,7 +196,7 @@ details.meer[open] { display: grid; gap: 14px; }
 .printlijst li.actief { border-color: var(--inkt); }
 .printlijst li > span:first-child { min-width: 0; }
 
-/* Link naar vzw peapickers naast de naam */
+/* Link naar peapickers naast de naam */
 .logo-groep { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; }
 .vzw-link { font-size: .9rem; color: var(--zacht); }
 @media (max-width: 440px) { .acties { flex-wrap: nowrap; } .acties .prijs .klein { display: none; } }

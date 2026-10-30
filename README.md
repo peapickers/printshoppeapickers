@@ -58,7 +58,7 @@ Zolang dat veld leeg is, verwijst de site naar SwissTransfer.
 
 ### 5. Prijzen, uren en andere instellingen
 Alles staat in **`js/config.js`**: prijzen per papiersoort, leverkost, leveruren, duur van een levermoment,
-minimum aantal dagen vooraf, leverzone (postcodes) en de link naar de postershop van vzw peapickers.
+minimum aantal dagen vooraf, leverzone (postcodes) en de link naar de postershop van peapickers.
 
 ## Bestanden
 

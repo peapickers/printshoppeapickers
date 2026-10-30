@@ -124,7 +124,7 @@
     if (kop) {
       kop.innerHTML = `
         <span class="logo-groep"><a class="logo" href="index.html">${S.naam}</a>
-          <a class="vzw-link" href="${S.vzwUrl}">← vzw peapickers</a></span>
+          <a class="vzw-link" href="${S.vzwUrl}">← peapickers</a></span>
         <nav>
           ${link("index.html", "Home")}
           ${link("uploadgids.html", "Bestanden klaarmaken")}
@@ -138,8 +138,8 @@
         <section class="pp-blok">
           <div>
             <p class="eyebrow">Ook van ons</p>
-            <h2>De postershop van vzw peapickers</h2>
-            <p>Liever een kant-en-klare poster dan je eigen beeld? Bij vzw peapickers bestel je posters
+            <h2>De postershop van peapickers</h2>
+            <p>Liever een kant-en-klare poster dan je eigen beeld? Bij peapickers bestel je posters
             op dezelfde manier: je kiest, prikt een moment dat je thuis bent en betaalt aan de deur.</p>
           </div>
           <a class="knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Naar de postershop ↗</a>

@@ -3,9 +3,9 @@ window.SHOP = {
   naam: "Peapickers Printshop",
   email: "printshoppeapickers@proton.me",
 
-  // Link naar de postershop van vzw peapickers.
+  // Link naar de postershop van peapickers.
   peapickersUrl: "https://peapickers.github.io/postershoppeapickers/",
-  // Landingspagina van vzw peapickers met alle merken.
+  // Landingspagina van peapickers met alle merken.
   vzwUrl: "https://peapickers.github.io/printshoppeapickers/vzw/",
 
   // Pushmelding naar je gsm via de gratis app ntfy (https://ntfy.sh).
