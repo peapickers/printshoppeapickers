@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bestellen · Peapickers Printshop</title>
+  <title>Bestellen · peapickers printshop</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -63,7 +63,11 @@
       </section>
 
       <section class="stap" data-stap="3" hidden>
-        <h1>Wanneer ben je thuis?</h1>
+        <h1>Hoe wil je je prints krijgen?</h1>
+        <div class="veld" id="veld-lw"><span class="veld-titel">Levering</span>
+          <div class="keuzes keuzes-lijst" id="leverwijzen"></div>
+          <p class="hint" id="ronde-stand"></p></div>
+        <div id="moment-velden">
         <div class="veld" id="veld-dag"><span class="veld-titel">Dag</span>
           <div class="keuzes" id="dagen"></div>
           <div class="kaart verborgen" id="kalender">
@@ -79,6 +83,7 @@
           <div class="keuzes" id="tijdvakken"></div>
           <p class="melding verborgen">Kies nog een uur.</p></div>
         <p class="hint" id="kal-status"></p>
+        </div>
         <div class="hulp-plek" data-hulp="3"></div>
         <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-3"></span><button type="button" class="knop" data-verder>Verder</button></div>
       </section>
@@ -87,7 +92,7 @@
         <h1>Waar mag ik leveren?</h1>
         <div class="rij">
           <div class="veld"><label for="naam">Naam</label><input id="naam" autocomplete="name"><p class="melding verborgen">Vul je naam in.</p></div>
-          <div class="veld"><label for="tel">Gsm</label><input id="tel" type="tel" autocomplete="tel"><p class="melding verborgen">Ik stuur je een bericht 30 minuten voor ik kom. Vul je gsm-nummer in.</p></div>
+          <div class="veld"><label for="tel">Gsm</label><input id="tel" type="tel" autocomplete="tel"><p class="melding verborgen">We sturen je een bericht 30 minuten voor we komen. Vul je gsm-nummer in.</p></div>
         </div>
         <div class="veld"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email"><p class="melding verborgen">Vul je e-mailadres in.</p></div>
         <div class="veld"><label for="adres">Straat en nummer</label><input id="adres" autocomplete="street-address"><p class="melding verborgen">Vul je adres in.</p></div>
@@ -98,7 +103,9 @@
         <details class="meer"><summary>Opmerking toevoegen</summary>
           <textarea id="opmerking" rows="3" placeholder="Bv. bel aan bij de achterdeur"></textarea></details>
         <div class="hulp-plek" data-hulp="4"></div>
-        <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-4"></span><button type="button" class="knop" data-verder>Bestelling plaatsen</button></div>
+        <div id="herroep-4"></div>
+        <div class="acties"><button type="button" class="link" data-terug>Terug</button><span class="prijs" id="prijs-4"></span><button type="button" class="knop" data-verder>Bestellen met betalingsverplichting</button></div>
+        <p class="klein">Betalen gebeurt vooraf. Later met Bancontact via Mollie, zodra de vzw bestaat. Nu zie je een voorbeeld met een overschrijving: er wordt niets betaald of verstuurd.</p>
       </section>
     </div>
     <div id="resultaat" class="verborgen">
@@ -116,8 +123,11 @@
             <p id="res-datum"></p>
             <p><a id="res-bon" href="#">Bekijk je bestelbon</a></p>
           </div>
-          <div><div class="qr" id="res-qr"></div><p class="klein" style="text-align:center">Toon deze QR-code bij de levering</p></div>
+          <div><div class="qr" id="res-qr"></div><p class="klein" style="text-align:center">Scan met je bankapp (voorbeeld)</p></div>
         </div>
+        <dl class="betaal-gegevens" id="res-betaal"></dl>
+        <div id="res-herroep"></div>
+        <div id="snipcart-items" hidden></div>
       </section>
     </div>
   </main>

@@ -1,8 +1,8 @@
-# Peapickers Printshop – webshop
+# peapickers printshop – webshop
 
 Een statische webshop: geen server, geen betaalprovider, geen kosten voor hosting.
 De klant stelt prints samen, kiest een levermoment in de kalender en krijgt een
-QR-code met de bestelbon. Er wordt betaald aan de deur.
+QR-code voor de betaling vooraf (voorbeeld, ongeldige rekening). Er wordt nooit aan de deur of cash betaald. Bancontact via Mollie in de mand van Snipcart volgt zodra de vzw bestaat; de velden staan al klaar (`Shop.snipcartAttrs`). Levering: gedeelde leverronde (€ 1, stand uit de postershop: `leverronde.json`), een moment naar keuze (kalender) of bpost buiten Gent.
 
 ## Hoe een bestelling bij je binnenkomt
 
@@ -30,7 +30,7 @@ Ga in Proton Mail naar **Instellingen → Alle instellingen → Automatisch antw
 >
 > Heb je je foto's nog niet doorgestuurd? Gebruik dan de knop "Upload hier je foto's" op de bestelpagina. Vergeet je bestelnummer niet.
 >
-> Ik lever op het moment dat je gekozen hebt. Je betaalt bij de levering, aan de deur. Moet het moment toch veranderen? Antwoord gewoon op deze mail.
+> We leveren met de leverwijze die je gekozen hebt. Je hebt al vooraf betaald. Moet het moment toch veranderen? Antwoord gewoon op deze mail.
 >
 > Tot binnenkort,
 > Jonas

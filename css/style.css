@@ -236,3 +236,20 @@ details.meer[open] { display: grid; gap: 14px; }
   .ps-detail::before { content: attr(data-label); display: block; padding: .4rem .5rem; margin-bottom: .4rem; font-weight: 700; border: 1px solid var(--inkt); background: #d9d9d6; }
   .ps-detail + .ps-detail::before { background: var(--inkt); color: var(--papier); }
 }
+
+/* Leverwijze, betaling vooraf en melding maatwerk (8-11-2026) */
+.keuzes.keuzes-lijst { flex-direction: column; align-items: stretch; }
+.keuzes.keuzes-lijst label span { display: block; text-align: left; }
+.herroep-melding { border: 1px solid var(--inkt); padding: .5rem .75rem; margin: 1rem 0; position: relative; }
+.tip { display: inline-flex; align-items: center; justify-content: center; width: 1.3rem; height: 1.3rem; border: 1px solid var(--inkt); border-radius: 50%; font-size: .8rem; cursor: help; margin-left: .3rem; }
+.tip-tekst { display: none; position: absolute; left: 0; right: 0; top: 100%; z-index: 5; background: var(--inkt); color: var(--papier); padding: .6rem .75rem; font-size: .88rem; }
+.tip:hover + .tip-tekst, .tip:focus + .tip-tekst { display: block; }
+.betaal-gegevens { display: grid; grid-template-columns: max-content 1fr; gap: .2rem 1rem; font-size: .92rem; margin: 1rem 0 0; font-variant-numeric: tabular-nums; }
+.betaal-gegevens dt { color: var(--zacht); }
+.betaal-gegevens dd { margin: 0; overflow-wrap: anywhere; }
+.kern { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin: 1rem 0 2rem; }
+.kern > div { border: 1px solid var(--inkt); background: #fff; padding: 1rem; }
+.kern p { margin: 0; font-size: .9rem; }
+.kern .kern-groot { font-size: 1.5rem; font-weight: 700; line-height: 1.1; margin-bottom: .4rem; }
+@media (max-width: 575.98px) { .kern { grid-template-columns: 1fr; } }
+@media print { .tip, .tip-tekst { display: none !important; } }
