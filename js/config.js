@@ -1,6 +1,6 @@
 // Alles wat Jonas zelf wil aanpassen staat in dit bestand.
 window.SHOP = {
-  naam: "Peapickers Printshop",
+  naam: "peapickers printshop",
   email: "printshoppeapickers@proton.me",
 
   // Link naar de postershop van peapickers.
@@ -17,8 +17,26 @@ window.SHOP = {
   // versleutelde opslag). Leeg = uitleg via SwissTransfer naar je e-mailadres.
   uploadUrl: "",
 
-  leverkost: 3,
-  betaalwijzen: "cash of Payconiq/overschrijving ter plaatse",
+  // Levering (beslissing 8-11-2026, samen met de postershop). Geen bestelminimum.
+  // De stand van de gedeelde leverronde komt uit de postershop, zodat beide shops dezelfde ronde vullen.
+  leverwijzen: {
+    leverronde: { label: "Gedeelde leverronde in Gent", kost: 1, gebied: "gent",
+      uitleg: "Samen met bestellingen van de postershop. De ronde vertrekt bij 10 deelnemers, of na 14 dagen met wie er dan is. Je levering kan dus laat komen." },
+    moment: { label: "Levering in Gent op een moment naar keuze", kost: 3, gebied: "gent",
+      uitleg: "Zo snel mogelijk. Je kiest zelf de dag en het uur waarop je thuis bent." },
+    bpost: { label: "bpost buiten Gent", kost: null, gebied: "buiten",
+      uitleg: "Buiten Gent en deelgemeenten, zonder leverronde. Aan kostprijs: het tarief ligt nog niet vast en zit nog niet in het totaal." },
+  },
+  leverrondeUrl: "https://peapickers.github.io/postershoppeapickers/leverronde.json",
+
+  // Betalen gebeurt altijd vooraf, zoals in de postershop. Later Bancontact via Mollie in de mand van
+  // Snipcart, zodra de vzw bestaat. Nu een voorbeeld: overschrijving met QR-code naar een ongeldige rekening.
+  // Nooit cash, nooit aan de deur.
+  snipcartSleutel: "",
+  voorbeeldRekening: { naam: "VOORBEELD, NIET BETALEN", iban: "BE00000000000000", tonen: "BE00 0000 0000 0000 (ongeldig voorbeeld)" },
+
+  // Maatwerk: geen wettelijk herroepingsrecht (vraag ligt bij het Cultuurloket).
+  herroepingTooltip: "Je print wordt speciaal voor jou gemaakt met jouw foto. Voor op maat gemaakte goederen geldt het wettelijke herroepingsrecht van 14 dagen niet.",
 
   // Leverkalender. Momenten die bezet staan in je Proton-agenda verdwijnen
   // automatisch (zie beschikbaarheid.json en .github/workflows).
@@ -31,7 +49,7 @@ window.SHOP = {
 
   // Prijs = 3 × M. M is de materiaalkost van één print: papier en inkt,
   // plus 20% voor misdrukken en fouten. Zelfde redenering als de 7M van de
-  // postershop, maar zonder auteursrechten of voorschotten.
+  // postershop, maar zonder auteursrechten. Alles gaat naar vzw peapickers.
   prijsFactor: 3,
   misdrukMarge: 0.2,
   // VOORBEELDBEDRAGEN: materiaalkost (papier + inkt) zonder marge.

@@ -18,10 +18,48 @@
     return Math.ceil(S.prijsFactor * materiaalkost(item) * 2) / 2;
   }
 
-  function totalen(items) {
+  // lw = leverwijze (leverronde, moment of bpost). bpost is aan kostprijs en zit nog niet in het totaal.
+  function totalen(items, lw = "moment") {
     const prints = items.reduce((s, i) => s + prijsPerStuk(i) * i.aantal, 0);
-    const levering = items.length ? S.leverkost : 0;
-    return { prints, levering, totaal: prints + levering };
+    const w = S.leverwijzen[lw] || S.leverwijzen.moment;
+    const onbekend = w.kost === null;
+    const levering = items.length && !onbekend ? w.kost : 0;
+    return { prints, levering, onbekend, totaal: prints + levering, leverwijze: w };
+  }
+  function leverTekst(t) { return t.onbekend ? "aan kostprijs, nog te bepalen" : euro(t.levering); }
+
+  // Melding bij maatwerk, boven de bestelknop en op de bon. Geen vinkje, wel een tooltip.
+  function herroepMelding() {
+    return `<p class="herroep-melding"><strong>Geen herroepingsrecht</strong>
+      <span class="tip" tabindex="0" role="button" aria-label="Waarom niet?" data-tip="${S.herroepingTooltip}">?</span>
+      <span class="tip-tekst" role="tooltip">${S.herroepingTooltip}</span></p>`;
+  }
+
+  // Belgische gestructureerde mededeling (mod 97), zoals in de postershop.
+  function ogm(id) {
+    const basis = (String(id).replace(/\D/g, "") + String(Math.floor(Math.random() * 1e10))).slice(0, 10).padEnd(10, "0");
+    const c = Number(BigInt(basis) % 97n) || 97, t = basis + String(c).padStart(2, "0");
+    return `+++${t.slice(0, 3)}/${t.slice(3, 7)}/${t.slice(7)}+++`;
+  }
+  // EPC-QR (versie 002) voor de voorbeeldoverschrijving. De rekening is ongeldig: er wordt niets betaald.
+  function epc(bedrag, mededeling) {
+    const r = S.voorbeeldRekening;
+    return ["BCD", "002", "1", "SCT", "", r.naam, r.iban, "EUR" + bedrag.toFixed(2), "", "", mededeling].join("\n");
+  }
+  // Velden zoals Snipcart ze later leest (data-item-*). Nu alleen klaargezet, niet gebruikt.
+  function snipcartAttrs(i, id) {
+    const attrs = {
+      "data-item-id": `PRINT-${i.papier}-${i.gsm}-${i.b}x${i.h}${i.rand === "rand" ? "-rand" + (i.randCm || 0) : ""}`,
+      "data-item-name": `Print ${itemOmschrijving(i)}`,
+      "data-item-price": prijsPerStuk(i).toFixed(2),
+      "data-item-quantity": i.aantal,
+      "data-item-url": "/printshoppeapickers/bestellen.html",
+      "data-item-taxable": "false",
+      "data-item-shippable": "true",
+      "data-item-custom1-name": "Bestelnummer", "data-item-custom1-type": "readonly", "data-item-custom1-value": id,
+      "data-item-custom2-name": "Bestand", "data-item-custom2-type": "readonly", "data-item-custom2-value": i.bestand || "",
+    };
+    return Object.entries(attrs).map(([k, v]) => `${k}="${String(v).replace(/"/g, "&quot;")}"`).join(" ");
   }
 
   const isoDatum = (d) =>
@@ -67,7 +105,7 @@
   // Bestelling <-> korte tekst in de link (base64url van JSON).
   function codeer(order) {
     const compact = {
-      v: 1, id: order.id, dt: order.datum, tv: order.tijdvak, n: order.naam,
+      v: 2, id: order.id, lw: order.leverwijze, dt: order.datum, tv: order.tijdvak, n: order.naam,
       a: order.adres, pc: order.postcode, g: order.gemeente, t: order.tel, e: order.email,
       o: order.opmerking || "",
       i: order.items.map((i) => [i.papier, i.gsm, i.b, i.h, i.aantal, i.rand, i.bestand || "", i.randCm || 0]),
@@ -83,7 +121,7 @@
     const bin = atob(b64);
     const c = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (ch) => ch.charCodeAt(0))));
     return {
-      id: c.id, datum: c.dt, tijdvak: c.tv, naam: c.n, adres: c.a, postcode: c.pc,
+      id: c.id, leverwijze: c.lw || "moment", datum: c.dt, tijdvak: c.tv, naam: c.n, adres: c.a, postcode: c.pc,
       gemeente: c.g, tel: c.t, email: c.e, opmerking: c.o,
       items: c.i.map(([papier, gsm, b, h, aantal, rand, bestand, randCm]) => ({ papier, gsm, b, h, aantal, rand, bestand, randCm })),
     };
@@ -129,7 +167,10 @@
           ${link("index.html", "Home")}
           ${link("uploadgids.html", "Bestanden klaarmaken")}
           ${link("bestellen.html", "Bestellen")}
-          <a class="pp-knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Peapickers Posters ↗</a>
+          ${link("prijzen.html", "Prijsopbouw")}
+          <a href="${S.peapickersUrl}vzw.html">Over</a>
+          <a href="${S.peapickersUrl}register.html">Public Ledger</a>
+          <a class="pp-knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">peapickers postershop ↗</a>
         </nav>`;
     }
     const voet = document.getElementById("voet");
@@ -139,18 +180,19 @@
           <div>
             <p class="eyebrow">Ook van ons</p>
             <h2>De postershop van peapickers</h2>
-            <p>Liever een kant-en-klare poster dan je eigen beeld? Bij peapickers bestel je posters
-            op dezelfde manier: je kiest, prikt een moment dat je thuis bent en betaalt aan de deur.</p>
+            <p>Liever een poster van een onafhankelijke kunstenaar dan je eigen beeld? Bij de postershop
+            bestel je op dezelfde manier: je kiest, betaalt vooraf en krijgt alles persoonlijk geleverd, ook via dezelfde gedeelde leverronde.</p>
           </div>
           <a class="knop" href="${S.peapickersUrl}" target="_blank" rel="noopener">Naar de postershop ↗</a>
         </section>
-        <p class="klein">Levering (voorlopig) alleen in Gent en deelgemeenten · ${euro(S.leverkost)} per levering ·
-        betalen aan de deur · <a href="mailto:${S.email}">${S.email}</a></p>`;
+        <p class="klein">Voorbeeldsite: vzw peapickers is in oprichting en verkoopt nog niets. ·
+        Gedeelde leverronde ${euro(S.leverwijzen.leverronde.kost)} of een moment naar keuze ${euro(S.leverwijzen.moment.kost)} in Gent, bpost daarbuiten ·
+        altijd vooraf betalen · <a href="mailto:${S.email}">${S.email}</a></p>`;
     }
   }
 
   window.Shop = {
-    euro, materiaalkost, prijsPerStuk, totalen, leverslots, datumLang, zijdenOk,
+    euro, materiaalkost, prijsPerStuk, totalen, leverTekst, herroepMelding, ogm, epc, snipcartAttrs, leverslots, datumLang, zijdenOk,
     codeer, decodeer, bonUrl, nieuwOrderId, itemOmschrijving, tekenQr, fmtCm,
   };
   document.addEventListener("DOMContentLoaded", kopEnVoet);

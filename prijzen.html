@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prijsopbouw · Peapickers Printshop</title>
+  <title>Prijsopbouw · peapickers printshop</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -15,21 +15,22 @@
       <h2>De prijs</h2>
       <p>We meten de materiaalkost <strong>M</strong> van één print: papier en inkt, plus 20% voor misdrukken en fouten.
         De prijs is altijd 3 × M. Werkuren tellen niet mee.</p>
-      <p>Je laat je eigen beeld drukken, dus er zijn geen auteursrechten of voorschotten. Daarom volstaat 3M, waar
-        <a href="https://peapickers.github.io/postershoppeapickers/about.html">Peapickers Posters</a> met 7M werkt.</p>
+      <p>Je laat je eigen beeld drukken, dus er zijn geen auteursrechten. Daarom volstaat 3M, en gaat alles naar vzw peapickers.
+        Hoe de prijzen van peapickers werken, lees je bij de <a href="https://peapickers.github.io/postershoppeapickers/about.html">Prijsopbouw van de postershop</a>.</p>
 
       <figure class="prijs-schema" aria-label="Prijsopbouw: 3 delen van de materiaalkost M">
         <div class="ps-balk">
           <div class="ps-deel ps-materiaal" style="--n:1"><span class="ps-m">1M</span><span class="ps-naam">Materiaal</span><span class="ps-bedrag" data-m="1"></span></div>
-          <div class="ps-deel ps-peapickers" style="--n:2"><span class="ps-m">2M</span><span class="ps-naam">peapickers</span><span class="ps-bedrag" data-m="2"></span></div>
+          <div class="ps-deel ps-peapickers" style="--n:2"><span class="ps-m">2M</span><span class="ps-naam">vzw peapickers</span><span class="ps-bedrag" data-m="2"></span></div>
         </div>
         <div class="ps-details">
           <div class="ps-detail" style="--n:1" data-label="1M · Materiaal"><p>Papier en inkt, plus 20% voor misdrukken en fouten.</p></div>
-          <div class="ps-detail" style="--n:2" data-label="2M · peapickers"><p>Ondersteunt peapickers en het uitwerken van culturele projecten in de vorm van productcreatie.</p></div>
+          <div class="ps-detail" style="--n:2" data-label="2M · vzw peapickers"><p>Verpakking, betaalkosten, levering en de overhead van de vzw, en de reserve voor de sociaal-culturele doelen.</p></div>
         </div>
         <figcaption class="ps-totaal"><span><strong>3M</strong> = prijs</span><strong data-m="3"></strong><span class="klein" id="ps-voorbeeld"></span></figcaption>
       </figure>
-      <p>Alle opbrengsten gaan naar peapickers. Levering kost ${LEVER} per bestelling, hoeveel prints je ook bestelt.
+      <p>Alle opbrengsten gaan naar vzw peapickers. Er komt geen btw bovenop. Levering in Gent kost ${RONDE} met de gedeelde leverronde
+        of ${LEVER} op een moment naar keuze, per bestelling, hoeveel prints je ook bestelt. Buiten Gent: bpost aan kostprijs. Geen bestelminimum.
         Elke prijs wordt naar boven afgerond op 50 cent. Een witte rand of volledig vullen kost hetzelfde.</p>
     </section>
 
@@ -58,7 +59,7 @@
       document.querySelectorAll("[data-m]").forEach((el) => (el.textContent = Shop.euro(M * Number(el.dataset.m))));
       document.getElementById("ps-voorbeeld").textContent =
         `Rekenvoorbeeld ${p.label} ${gsm} g/m², ${Shop.fmtCm(vb.b)} × ${Shop.fmtCm(vb.h)} cm, M = ${Shop.euro(M)}`;
-      document.querySelectorAll(".prijs-tekst p").forEach((el) => (el.innerHTML = el.innerHTML.replace("${LEVER}", Shop.euro(S.leverkost))));
+      document.querySelectorAll(".prijs-tekst p").forEach((el) => (el.innerHTML = el.innerHTML.replace("${LEVER}", Shop.euro(S.leverwijzen.moment.kost)).replace("${RONDE}", Shop.euro(S.leverwijzen.leverronde.kost))));
 
       // Eén tabel per papiersoort: rijen zijn de breedtes, kolommen de diktes.
       document.getElementById("prijstabel").innerHTML = Object.entries(S.papier).map(([key, p]) => {

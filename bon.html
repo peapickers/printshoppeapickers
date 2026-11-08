@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Bestelbon · Peapickers Printshop</title>
+  <title>Bestelbon · peapickers printshop</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -22,7 +22,7 @@
         <div class="bon-kop">
           <div>
             <p class="eyebrow">Bestelbon <span id="id"></span></p>
-            <h1 style="font-size:1.6rem">Te betalen aan de deur</h1>
+            <h1 style="font-size:1.6rem">Prints op maat</h1>
             <p class="te-betalen" id="totaal"></p>
             <p id="levering"></p>
           </div>
@@ -36,7 +36,7 @@
             <tbody id="regels"></tbody>
             <tfoot>
               <tr><td colspan="3">Levering</td><td class="bedrag" id="leverkost"></td></tr>
-              <tr><td colspan="3">Totaal te betalen</td><td class="bedrag" id="totaal2"></td></tr>
+              <tr><td colspan="3">Totaal</td><td class="bedrag" id="totaal2"></td></tr>
             </tfoot>
           </table>
         </div>
@@ -44,6 +44,7 @@
         <h2 style="margin-top:1.5rem">Leveradres</h2>
         <p id="klant"></p>
         <p id="opmerking" class="klein"></p>
+        <div id="herroep"></div>
         <p class="klein" id="betaal"></p>
         <p class="niet-printen">
           <a class="knop licht" id="bel" href="#">Bellen</a>
@@ -65,20 +66,21 @@
       if (!order) { $("#leeg").classList.remove("verborgen"); return; }
 
       // Bedragen worden altijd opnieuw berekend uit de prijslijst, niet uit de link.
-      const t = Shop.totalen(order.items);
+      const t = Shop.totalen(order.items, order.leverwijze);
       const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
       $("#id").textContent = order.id;
       $("#totaal").textContent = Shop.euro(t.totaal);
       $("#totaal2").textContent = Shop.euro(t.totaal);
-      $("#leverkost").textContent = Shop.euro(t.levering);
-      $("#levering").textContent = `Levering op ${Shop.datumLang(order.datum)}, tussen ${order.tijdvak}`;
+      $("#leverkost").textContent = Shop.leverTekst(t);
+      $("#levering").textContent = order.datum ? `Levering op ${Shop.datumLang(order.datum)}, tussen ${order.tijdvak}` : t.leverwijze.label;
       $("#regels").innerHTML = order.items.map((i) => `
         <tr><td>${esc(Shop.itemOmschrijving(i))}${i.bestand ? `<br><span class="klein">${esc(i.bestand)}</span>` : ""}</td>
         <td>${i.aantal}</td><td class="bedrag">${Shop.euro(Shop.prijsPerStuk(i))}</td>
         <td class="bedrag">${Shop.euro(Shop.prijsPerStuk(i) * i.aantal)}</td></tr>`).join("");
       $("#klant").innerHTML = `${esc(order.naam)}<br>${esc(order.adres)}<br>${esc(order.postcode)} ${esc(order.gemeente)}<br>${esc(order.tel)} · ${esc(order.email)}`;
       if (order.opmerking) $("#opmerking").textContent = `Opmerking: ${order.opmerking}`;
-      $("#betaal").textContent = `Betalen kan met ${S.betaalwijzen}.`;
+      $("#herroep").innerHTML = Shop.herroepMelding();
+      $("#betaal").textContent = "Vooraf betaald bij het bestellen. Je foto's worden verwijderd na de levering.";
       $("#bel").href = `tel:${order.tel.replace(/\s/g, "")}`;
       $("#kaart").href = `https://www.openstreetmap.org/search?query=${encodeURIComponent(`${order.adres}, ${order.postcode} ${order.gemeente}`)}`;
       Shop.tekenQr($("#qr"), location.href);

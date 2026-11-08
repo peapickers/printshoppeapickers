@@ -10,12 +10,13 @@
   let terugTeller = 0;
   let gekozenDatum = "";
   let gekozenTijdvak = "";
+  let leverwijze = "leverronde";
 
   const HULP = {
     1: `Tik op het vak en kies je foto uit je galerij. Kies altijd de originele foto, geen schermafbeelding en geen foto die je via WhatsApp kreeg. Meer weten? Lees het <a href="uploadgids.html">stappenplan</a>.`,
     2: `Twijfel je? Laat alles gewoon staan, dat past bij bijna elke foto. De hoogte volgt vanzelf uit je foto, dus er valt niets weg. Meer foto's laten printen? Tik op "+ Nog een foto toevoegen".`,
-    3: `Kies een dag en een uur waarop je thuis bent. Ik breng je print zelf langs en je betaalt dan aan de deur. Ik heb minstens ${S.minDagenVooraf} dagen nodig om te printen en te laten drogen.`,
-    4: `Ik heb je adres nodig om te leveren en je gsm-nummer om je een bericht te sturen 30 minuten voor ik kom. Ik deel je gegevens met niemand.`,
+    3: `Met de gedeelde leverronde betaal je ${Shop.euro(S.leverwijzen.leverronde.kost)} en komen je prints mee met andere bestellingen uit Gent, ook die van de postershop. Dat kan tot 14 dagen duren. Kun je niet wachten, kies dan een moment naar keuze: je duidt een dag en een uur aan waarop je thuis bent. We hebben minstens ${S.minDagenVooraf} dagen nodig om te printen en te laten drogen. Woon je buiten Gent en deelgemeenten, dan gaat je bestelling met bpost.`,
+    4: `We hebben je adres nodig om te leveren en je gsm-nummer om je een bericht te sturen 30 minuten voor we komen. We delen je gegevens met niemand. Je foto's worden verwijderd na de levering.`,
   };
 
   // ---------- Stappen ----------
@@ -64,6 +65,7 @@
       return false;
     }
     if (n === 3) {
+      if (leverwijze !== "moment") return true;
       const dagOk = !!gekozenDatum, uurOk = !!gekozenTijdvak;
       markeer($("#veld-dag"), !dagOk);
       if (dagOk) markeer($("#veld-uur"), !uurOk);
@@ -278,8 +280,8 @@
     const klaar = prints.filter((p) => p.file && Shop.zijdenOk(p.b, p.h));
     const stuk = huidig.h ? Shop.prijsPerStuk(huidig) : NaN;
     $("#prijs-2").textContent = isNaN(stuk) ? "" : Shop.euro(stuk * huidig.aantal);
-    const t = Shop.totalen(klaar);
-    ["#prijs-3", "#prijs-4"].forEach((s) => ($(s).innerHTML = `${Shop.euro(t.totaal)} <span class="klein">incl. levering</span>`));
+    const t = Shop.totalen(klaar, leverwijze);
+    ["#prijs-3", "#prijs-4"].forEach((s) => ($(s).innerHTML = `${Shop.euro(t.totaal)} <span class="klein">${t.onbekend ? "+ bpost aan kostprijs" : "incl. levering"}</span>`));
   }
 
   // ---------- Leverdag ----------
@@ -363,22 +365,41 @@
   $("#kal-vorige").addEventListener("click", () => { maand = new Date(maand.getFullYear(), maand.getMonth() - 1, 1); tekenKalender(); });
   $("#kal-volgende").addEventListener("click", () => { maand = new Date(maand.getFullYear(), maand.getMonth() + 1, 1); tekenKalender(); });
 
+  // ---------- Leverwijze ----------
+  function tekenLeverwijzen() {
+    radios($("#leverwijzen"), "leverwijze", Object.entries(S.leverwijzen).map(([k, w]) =>
+      [k, `<strong>${w.label}</strong>: ${w.kost === null ? "aan kostprijs" : Shop.euro(w.kost)}${k === "leverronde" ? " per deelnemer" : ""}<br><span class="klein">${w.uitleg}</span>`]), leverwijze);
+    $("#moment-velden").classList.toggle("verborgen", leverwijze !== "moment");
+  }
+  $("#leverwijzen").addEventListener("change", (e) => { leverwijze = e.target.value; tekenLeverwijzen(); bijwerkenPrijs(); });
+  // Stand van de gedeelde ronde: dezelfde als in de postershop (voorbeeldcijfers tot er echte bestellingen zijn).
+  async function laadRonde() {
+    try {
+      const r = await fetch(S.leverrondeUrl, { cache: "no-store" });
+      if (!r.ok) return;
+      const j = await r.json();
+      $("#ronde-stand").textContent = `Leverronde: nu ${j.deelnemers} van de ${j.vertrekBij} deelnemers, uit de postershop en de printshop samen. Ze vertrekt uiterlijk op ${Shop.datumLang(j.sluitUiterlijk)}.${j.voorbeeld ? " (Voorbeeld.)" : ""}`;
+    } catch (e) { /* zonder stand tonen we alleen de uitleg */ }
+  }
+
   // ---------- Postcode ----------
   function postcodeOk() {
     const pc = $("#postcode").value.trim();
     if (pc.length < 4) return !!pc;
-    if (S.postcodes[pc]) {
+    const gent = !!S.postcodes[pc], buiten = leverwijze === "bpost";
+    if (gent !== buiten) {
       markeer($("#postcode").closest(".veld"), false);
       return true;
     }
-    markeer($("#postcode").closest(".veld"), true,
-      `Deze postcode ligt buiten mijn leverzone. Ik lever voorlopig alleen in Gent en deelgemeenten. Mail me even op <a href="mailto:${S.email}">${S.email}</a>, dan zoeken we samen een oplossing.`);
+    markeer($("#postcode").closest(".veld"), true, gent
+      ? `Voor een Gentse postcode kies je de leverronde of een moment naar keuze. Ga een stap terug.`
+      : `Deze postcode ligt buiten Gent en deelgemeenten. Kies bpost: ga een stap terug.`);
     return false;
   }
   $("#postcode").addEventListener("input", (e) => {
     const pc = e.target.value.trim();
     if (pc.length < 4) { markeer(e.target.closest(".veld"), false); return; }
-    if (postcodeOk() && !$("#gemeente").value) {
+    if (postcodeOk() && S.postcodes[pc] && !$("#gemeente").value) {
       $("#gemeente").value = S.postcodes[pc].split(" / ")[0];
       markeer($("#gemeente").closest(".veld"), false);
     }
@@ -400,8 +421,8 @@
 
   function maakOrder() {
     return {
-      id: Shop.nieuwOrderId(),
-      datum: gekozenDatum, tijdvak: gekozenTijdvak,
+      id: Shop.nieuwOrderId(), leverwijze,
+      datum: leverwijze === "moment" ? gekozenDatum : "", tijdvak: leverwijze === "moment" ? gekozenTijdvak : "",
       naam: $("#naam").value.trim(), tel: $("#tel").value.trim(), email: $("#email").value.trim(),
       adres: $("#adres").value.trim(), postcode: $("#postcode").value.trim(), gemeente: $("#gemeente").value.trim(),
       opmerking: $("#opmerking").value.trim(),
@@ -410,16 +431,17 @@
   }
 
   function orderTekst(order, url) {
-    const t = Shop.totalen(order.items);
+    const t = Shop.totalen(order.items, order.leverwijze);
     const regels = order.items.map((i, n) =>
       `${n + 1}. ${i.aantal} × ${Shop.itemOmschrijving(i)} (${i.bestand}) = ${Shop.euro(Shop.prijsPerStuk(i) * i.aantal)}`);
     return [
       `Bestelling ${order.id}`,
       ...regels,
-      `Levering: ${Shop.euro(t.levering)}`,
-      `Te betalen aan de deur: ${Shop.euro(t.totaal)}`,
+      `Levering: ${t.leverwijze.label}, ${Shop.leverTekst(t)}`,
+      `Totaal: ${Shop.euro(t.totaal)}${t.onbekend ? " + bpost aan kostprijs" : ""}, vooraf te betalen`,
+      `Geen herroepingsrecht: op maat gemaakt met je eigen foto.`,
       ``,
-      `Leverdag: ${Shop.datumLang(order.datum)}, ${order.tijdvak}`,
+      order.datum ? `Leverdag: ${Shop.datumLang(order.datum)}, ${order.tijdvak}` : "",
       `${order.naam} · ${order.tel} · ${order.email}`,
       `${order.adres}, ${order.postcode} ${order.gemeente}`,
       order.opmerking ? `Opmerking: ${order.opmerking}` : "",
@@ -443,36 +465,44 @@
   }
 
   function toonResultaat(order, url) {
-    const t = Shop.totalen(order.items);
+    const t = Shop.totalen(order.items, order.leverwijze);
     $("#formulier").classList.add("verborgen");
     $("#resultaat").classList.remove("verborgen");
     $("#res-id").textContent = order.id;
-    $("#res-totaal").textContent = `${Shop.euro(t.totaal)} te betalen aan de deur`;
-    $("#res-datum").textContent = `Levering op ${Shop.datumLang(order.datum)}, tussen ${order.tijdvak}. Betalen kan met ${S.betaalwijzen}.`;
+    const mededeling = Shop.ogm(order.id);
+    $("#res-totaal").textContent = `${Shop.euro(t.totaal)}${t.onbekend ? " + bpost" : ""}`;
+    $("#res-datum").textContent = order.datum
+      ? `Levering op ${Shop.datumLang(order.datum)}, tussen ${order.tijdvak}.`
+      : `${t.leverwijze.label}. ${t.leverwijze.uitleg}`;
     $("#res-bon").href = url;
-    Shop.tekenQr($("#res-qr"), url);
+    Shop.tekenQr($("#res-qr"), Shop.epc(t.totaal, mededeling));
+    $("#res-betaal").innerHTML = `<dt>Bedrag</dt><dd>${Shop.euro(t.totaal)}${t.onbekend ? " + bpost aan kostprijs" : ""}</dd>
+      <dt>Begunstigde</dt><dd>${S.voorbeeldRekening.naam}</dd><dt>Rekening</dt><dd>${S.voorbeeldRekening.tonen}</dd><dt>Mededeling</dt><dd>${mededeling}</dd>`;
+    $("#res-herroep").innerHTML = Shop.herroepMelding();
+    $("#snipcart-items").innerHTML = order.items.map((i) => `<button type="button" class="snipcart-add-item" ${Shop.snipcartAttrs(i, order.id)}></button>`).join("");
 
     const onderwerp = `Bestelling ${order.id}`;
     const tekst = orderTekst(order, url);
     const mailto = `mailto:${S.email}?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(tekst)}`;
     const upload = S.uploadUrl
       ? `<p>Tik op de knop en sleep je foto's in het vak. Vul bij je naam of bericht je bestelnummer <strong>${order.id}</strong> in.
-           Je bestanden worden versleuteld en alleen ik kan ze openen.</p>
+           Je bestanden worden versleuteld en verwijderd na de levering.</p>
          <p style="margin-top:.8rem"><a class="knop" href="${S.uploadUrl}" target="_blank" rel="noopener">Upload hier je foto's</a></p>`
       : `<p>Ga naar <a href="https://www.swisstransfer.com" target="_blank" rel="noopener">SwissTransfer</a>,
            voeg je originele bestanden toe en stuur ze naar <strong>${S.email}</strong> met bestelnummer <strong>${order.id}</strong> als bericht.
            <a href="uploadgids.html#versturen">Stap voor stap uitgelegd</a>.</p>`;
-    $("#res-titel").textContent = "Nog twee stappen";
-    $("#res-uitleg").textContent = "Je bestelling is pas definitief als ik je mail en je foto's heb ontvangen. Je krijgt meteen een bevestiging terug.";
+    $("#res-titel").textContent = "Betaal vooraf, stuur dan je foto's";
+    $("#res-uitleg").textContent = "Voorbeeld: de vzw bestaat nog niet, dus er wordt niets betaald of gedrukt. Later betaal je hier met Bancontact. Je bestelling is pas definitief na je betaling en als we je foto's hebben.";
     $("#res-stappen").innerHTML = `
       <ol class="stappen">
+        <li><h3>Betaal vooraf</h3><p>Scan de QR-code hieronder met je bankapp, of schrijf over met de gestructureerde mededeling. (Voorbeeld: niet betalen.)</p></li>
         <li><h3>Mail je bestelling</h3><p>Tik op de knop. Je mailprogramma opent met alles al ingevuld. Druk daar op Verzenden.</p>
           <p style="margin-top:.8rem"><a class="knop" href="${mailto}">Mail mijn bestelling</a></p>
           <details style="margin-top:.8rem"><summary class="klein">Opent er niets?</summary>
             <p class="klein">Kopieer deze tekst en mail hem zelf naar <strong>${S.email}</strong>.</p>
             <textarea rows="8" readonly id="kopie"></textarea>
             <button type="button" class="knop licht" id="kopieer">Kopieer</button></details></li>
-        <li><h3>Stuur je foto's</h3>${upload}</li>
+        <li><h3>Stuur je foto's</h3><p class="klein">Na je betaling, met je bestelnummer.</p>${upload}</li>
       </ol>`;
     $("#kopie").value = tekst;
     $("#kopieer").addEventListener("click", async () => {
@@ -484,6 +514,9 @@
   }
 
   nieuwePrint();
+  $("#herroep-4").innerHTML = Shop.herroepMelding();
+  tekenLeverwijzen();
+  laadRonde();
   gaNaar(1, false);
   laadBeschikbaarheid();
 })();
